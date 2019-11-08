@@ -73,8 +73,22 @@ function update() {
     tick();
     drawCanvas();
     drawBalls();
+    drawTargets();
+    processCollisions();
+    cleanUp();
+}
 
-    processCollision();
+function cleanUp() {
+    var indices = [];
+    for(i=targets.length-1; i>=0; i--) {
+        var target = targets[i];
+        if(target.lifetime <= 0) {
+            indices.push(i);
+        }
+    }
+    for(i=indices.length-1; i>=0; i--) {
+        targets.splice(indices[i], 1);
+    }
 }
 
 function tick() {
@@ -82,9 +96,13 @@ function tick() {
         var ball = balls[i];
         ball.tick();
     }
+    for(i=targets.length-1; i>=0; i--) {
+        var target = targets[i];
+        target.tick();
+    }
 }
 
-function processCollision() {
+function processCollisions() {
     var d;
     for(i=balls.length-1; i>=0; i--) {
         var ball = balls[i];
@@ -109,9 +127,12 @@ function drawBalls() {
         var ball = balls[i];
         ball.draw();
     }
+}
+
+function drawTargets() {
     for(i=targets.length-1; i>=0; i--) {
-        var ball = targets[i];
-        ball.draw();
+        var target = targets[i];
+        target.draw();
     }
 }
 
@@ -139,7 +160,7 @@ function mouseClicked(evt) {
     {
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        target = new Ball(x, y, 0, 0, 20, '#000000');
+        target = new Target(x, y, 0, 0, 20, '#000000');
         targets.push(target);
     }
     return
