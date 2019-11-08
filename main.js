@@ -8,6 +8,12 @@
 var canvas;
 var ctx;
 
+var C = {
+    "button": "steelblue",
+    "button_clicked": "red",
+    "button_text": "white"
+}
+
 var G = {
     "n_balls": 32,
     "world": {"width": 600, "height": 400},
@@ -17,10 +23,14 @@ var G = {
     "points": 0,
     "points_": 0,
     "multiplier": 1.1,
+    "lifetime": 100,
+    "targetSize": 20,
 
     "inMenu": true,
     "inGame": false,
-    "targetSet": false
+    "targetSet": false,
+
+    "buttons": []
 }
 
 
@@ -43,6 +53,14 @@ window.onload = function() {
 function initialise() {
     window.addEventListener('resize', resizeCanvas, false);
     resizeCanvas();
+    initGUI();
+}
+
+function initGUI() {
+    G.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
+    G.buttons.push(new ValueButton("+MULTIPLIER", 50, 100, 100, 20, "multiplier", function() {
+        G.multiplier += 1
+    }));
 }
 
 function startNewRound() {
@@ -79,11 +97,16 @@ function drawMenu() {
     ctx.globalAlpha = 0.5;
     ctx.fillRect(0, 0, G.world.width, G.world.height);
     ctx.globalAlpha = 1.0;
+
+    for(i=G.buttons.length-1; i>=0; i--) {
+        var button = G.buttons[i];
+        button.draw();
+    }
 }
 
 function drawStats() {
     ctx.lineWidth = '5';
-    ctx.fillStyle = '#000';
+    ctx.fillStyle = rgba(0.8, 0.8, 0.83, 1.0);
     ctx.strokeStyle = 'white';
 
     var x0 = 0;
@@ -181,9 +204,8 @@ function processCollisions() {
                 new_target = new Target(
                     ball.x,
                     ball.y,
-                    20,
-                    '#000000',
-                    1000,
+                    G.targetSize,
+                    G.lifetime,
                     generation
                 );
                 G.targets.push(new_target);
@@ -248,6 +270,17 @@ function mouseClicked(evt) {
 }
 
 function clickInMenu(evt) {
+    x = evt.clientX - canvas.offsetLeft;
+    y = evt.clientY - canvas.offsetTop;
+    for(i=G.buttons.length-1; i>=0; i--) {
+        var button = G.buttons[i];
+        if(isInside(x, y, button)) {
+            button.callback();
+        }
+    }
+}
+
+function clickNewRound() {
     console.log("New round started");
     startNewRound();
     G.inGame = true;
@@ -260,7 +293,7 @@ function clickInGame(evt) {
         G.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        target = new Target(x, y, 20, '#000000');
+        target = new Target(x, y, G.targetSize, G.lifetime);
         G.targets.push(target);
     }
 }

@@ -35,11 +35,10 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
 }
 
 
-var Target = function(x, y, r, c='#f55b5b', lifetime=1000, generation=1) {
+var Target = function(x, y, r, lifetime, generation=1) {
     this.x = x;
     this.y = y;
     this.r = r;
-    this.c = c;
     this.lifetime = lifetime;
     this.original_lifetime = lifetime;
     this.generation = generation;
