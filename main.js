@@ -74,10 +74,11 @@ function drawCanvas() {
 
 function drawMenu() {
     ctx.lineWidth = '5';
-    ctx.fillStyle = '#122389';
+    ctx.fillStyle = 'rgba(100, 100, 150, 1.0)';
     ctx.strokeStyle = 'white';
-
+    ctx.globalAlpha = 0.5;
     ctx.fillRect(0, 0, G.world.width, G.world.height);
+    ctx.globalAlpha = 1.0;
 }
 
 function drawStats() {
@@ -183,7 +184,7 @@ function processCollisions() {
                     ball.y,
                     20,
                     '#000000',
-                    100,
+                    1000,
                     generation
                 );
                 console.log(new_target.generation);

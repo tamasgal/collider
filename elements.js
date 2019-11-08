@@ -33,7 +33,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
 }
 
 
-var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
+var Target = function(x, y, r, c='#f55b5b', lifetime=1000, generation=1) {
     this.x = x;
     this.y = y;
     this.r = r;
@@ -50,12 +50,12 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
     }
 
     this.draw = function() {
-        var a = this.lifetime / 100;
-        var r = Math.round(this.generation / G.n_balls * 255);
-        var g = 40;
-        var b = 255 - r;
+        var a = this.lifetime / this.original_lifetime;
+        var r = Math.round(this.generation / G.n_balls);
+        var g = 0;
+        var b = 1 - r;
         ctx.beginPath();
-        ctx.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        ctx.fillStyle = rgba(r, g, b, a);
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
         ctx.font = "bold 15px Courier";
