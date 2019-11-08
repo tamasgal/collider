@@ -14,7 +14,9 @@ var gameOver = false;
 var targets = [];
 var targetSize = 20;
 
-var roundStarted = false;
+var inMenu = true;
+var inGame = false;
+var targetSet = false;
 
 
 window.onload = function() {
@@ -78,20 +80,26 @@ function resizeCanvas() {
 }
 
 function update() {
-    tick();
-    if(checkIfRoundHasEnded()) {
+    if(inMenu) {
         updateMenu();
-    } else {
+    }
+    if(inGame) {
         updateGame();
     }
 }
 
 function updateGame() {
+    tick();
     drawCanvas();
     drawBalls();
     drawTargets();
     processCollisions();
     cleanUp();
+    if(checkIfRoundHasEnded()) {
+        inGame = false;
+        inMenu = true;
+        targetSet = false;
+    }
 }
 
 function updateMenu() {
@@ -99,7 +107,7 @@ function updateMenu() {
 }
 
 function checkIfRoundHasEnded() {
-    if(roundStarted && targets.length == 0) {
+    if(targetSet && targets.length == 0) {
         return true;
     }
     return false;
@@ -184,24 +192,28 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if( targets.length == 0 && !roundStarted)
-    {
+    if(inGame) {
         clickInGame(evt);
     }
-    clickInMenu(evt);
-    return
+    if(inMenu) {
+        clickInMenu(evt);
+    }
 }
 
 function clickInMenu(evt) {
     console.log("New round started");
-    roundStarted = true;
     startNewRound();
+    inGame = true;
+    inMenu = false;
 }
 
 function clickInGame(evt) {
-    roundStarted = true;
-    x = evt.clientX - canvas.offsetLeft;
-    y = evt.clientY - canvas.offsetTop;
-    target = new Target(x, y, 20, '#000000');
-    targets.push(target);
+    console.log("Clicked in-game");
+    if( targets.length == 0 && !targetSet) {
+        targetSet = true;
+        x = evt.clientX - canvas.offsetLeft;
+        y = evt.clientY - canvas.offsetTop;
+        target = new Target(x, y, 20, '#000000');
+        targets.push(target);
+    }
 }
