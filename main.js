@@ -15,6 +15,7 @@ var targets = [];
 var targetSize = 20;
 
 var points = 0;
+var points_ = points;
 var multiplier = 1.1;
 
 var inMenu = true;
@@ -85,12 +86,15 @@ function drawStats() {
     var x0 = 0;
     var y0 = world.height;
 
+    if(points > points_) {
+        points_ += Math.round((points - points_) / 2);
+    }
     ctx.fillRect(x0, y0, world.width, 100);
     ctx.font = "bold 30px Courier";
     ctx.fillStyle = "#fff";
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
-    ctx.fillText("POINTS " + Math.round(points), x0 + 20, y0 + 40);
+    ctx.fillText("POINTS " + Math.round(points_), x0 + 20, y0 + 40);
     console.log(points);
 }
 
@@ -182,12 +186,16 @@ function processCollisions() {
                 );
                 console.log(new_target.generation);
                 targets.push(new_target);
-                points += Math.pow(multiplier, target.generation)
+                addPoints(Math.pow(multiplier, target.generation) * 1000);
                 balls.splice(i, 1);
                 return;
             }
         }
     }
+}
+
+function addPoints(p) {
+    points += p;
 }
 
 function distance(ball1, ball2) {
