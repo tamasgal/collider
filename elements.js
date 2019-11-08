@@ -12,10 +12,10 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.c = c;
 
     this.tick = function() {
-        if (this.x + this.dx > g.world.width - this.r || this.x + this.dx < this.r) {
+        if (this.x + this.dx > G.world.width - this.r || this.x + this.dx < this.r) {
             this.dx = -this.dx;
         }
-        if (this.y + this.dy > g.world.height - this.r || this.y + this.dy < this.r) {
+        if (this.y + this.dy > G.world.height - this.r || this.y + this.dy < this.r) {
             this.dy = -this.dy;
         }
         x = this.x + this.dx;
@@ -51,9 +51,12 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
 
     this.draw = function() {
         var a = this.lifetime / 100;
-        var r = Math.round(this.generation / g.n_balls * 255);
+        var r = Math.round(this.generation / G.n_balls * 255);
+        var g = 40;
+        var b = 255 - r;
         ctx.beginPath();
-        ctx.fillStyle = 'rgb(' + r + ', ' + (255 - r) + ', 40, ' + a + ')';
+        ctx.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
+        console.log(fillStyle);
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
         ctx.font = "bold 15px Courier";

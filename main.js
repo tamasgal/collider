@@ -8,7 +8,7 @@
 var canvas;
 var ctx;
 
-var g = {
+var G = {
     "n_balls": 16,
     "world": {"width": 600, "height": 400},
     "balls": [],
@@ -46,20 +46,21 @@ function initialise() {
 }
 
 function startNewRound() {
+    G.balls = [];
     createBalls();
 }
 
 function createBalls()  {
     var x, y, r, v;
-    for(i=0; i<g.n_balls; i++) {
+    for(i=0; i<G.n_balls; i++) {
         r = 10;
-        x = (g.world.width - 2 * r) * Math.random() + r;
-        y = (g.world.height - 2 * r) * Math.random() + r;
+        x = (G.world.width - 2 * r) * Math.random() + r;
+        y = (G.world.height - 2 * r) * Math.random() + r;
         d = Math.random() * Math.PI;
         v = Math.random() * 5 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
-        g.balls.push( new Ball(x, y, dx, dy, r) );
+        G.balls.push( new Ball(x, y, dx, dy, r) );
     }
 }
 
@@ -68,7 +69,7 @@ function drawCanvas() {
     ctx.fillStyle = '#f2eded';
     ctx.strokeStyle = 'white';
 
-    ctx.fillRect(0, 0, g.world.width, g.world.height);
+    ctx.fillRect(0, 0, G.world.width, G.world.height);
 }
 
 function drawMenu() {
@@ -76,7 +77,7 @@ function drawMenu() {
     ctx.fillStyle = '#122389';
     ctx.strokeStyle = 'white';
 
-    ctx.fillRect(0, 0, g.world.width, g.world.height);
+    ctx.fillRect(0, 0, G.world.width, G.world.height);
 }
 
 function drawStats() {
@@ -85,18 +86,18 @@ function drawStats() {
     ctx.strokeStyle = 'white';
 
     var x0 = 0;
-    var y0 = g.world.height;
+    var y0 = G.world.height;
 
-    if(g.points > g.points_) {
-        g.points_ += Math.round((g.points - g.points_) / 2);
+    if(G.points > G.points_) {
+        G.points_ += Math.round((G.points - G.points_) / 2);
     }
-    ctx.fillRect(x0, y0, g.world.width, 100);
+    ctx.fillRect(x0, y0, G.world.width, 100);
     ctx.font = "bold 30px Courier";
     ctx.fillStyle = "#fff";
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
-    ctx.fillText("POINTS " + Math.round(g.points_), x0 + 20, y0 + 40);
-    console.log(g.points);
+    ctx.fillText("POINTS " + Math.round(G.points_), x0 + 20, y0 + 40);
+    console.log(G.points);
 }
 
 function resizeCanvas() {
@@ -105,10 +106,10 @@ function resizeCanvas() {
 }
 
 function update() {
-    if(g.inMenu) {
+    if(G.inMenu) {
         updateMenu();
     }
-    if(g.inGame) {
+    if(G.inGame) {
         updateGame();
     }
     updateStats();
@@ -122,9 +123,9 @@ function updateGame() {
     processCollisions();
     cleanUp();
     if(checkIfRoundHasEnded()) {
-        g.inGame = false;
-        g.inMenu = true;
-        g.targetSet = false;
+        G.inGame = false;
+        G.inMenu = true;
+        G.targetSet = false;
     }
 }
 
@@ -137,7 +138,7 @@ function updateStats() {
 }
 
 function checkIfRoundHasEnded() {
-    if(g.targetSet && g.targets.length == 0) {
+    if(G.targetSet && G.targets.length == 0) {
         return true;
     }
     return false;
@@ -145,24 +146,24 @@ function checkIfRoundHasEnded() {
 
 function cleanUp() {
     var indices = [];
-    for(i=g.targets.length-1; i>=0; i--) {
-        var target = g.targets[i];
+    for(i=G.targets.length-1; i>=0; i--) {
+        var target = G.targets[i];
         if(target.lifetime <= 0) {
             indices.push(i);
         }
     }
     for(i=indices.length-1; i>=0; i--) {
-        g.targets.splice(indices[i], 1);
+        G.targets.splice(indices[i], 1);
     }
 }
 
 function tick() {
-    for(i=g.balls.length-1; i>=0; i--) {
-        var ball = g.balls[i];
+    for(i=G.balls.length-1; i>=0; i--) {
+        var ball = G.balls[i];
         ball.tick();
     }
-    for(i=g.targets.length-1; i>=0; i--) {
-        var target = g.targets[i];
+    for(i=G.targets.length-1; i>=0; i--) {
+        var target = G.targets[i];
         target.tick();
     }
 }
@@ -170,10 +171,10 @@ function tick() {
 function processCollisions() {
     var d;
     var generation;
-    for(i=g.balls.length-1; i>=0; i--) {
-        var ball = g.balls[i];
-        for(j=g.targets.length-1; j>=0; j--) {
-            var target = g.targets[j];
+    for(i=G.balls.length-1; i>=0; i--) {
+        var ball = G.balls[i];
+        for(j=G.targets.length-1; j>=0; j--) {
+            var target = G.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
                 generation = target.generation + 1
@@ -186,11 +187,11 @@ function processCollisions() {
                     generation
                 );
                 console.log(new_target.generation);
-                g.targets.push(new_target);
-                points = Math.pow(g.multiplier, target.generation);
+                G.targets.push(new_target);
+                points = Math.pow(G.multiplier, target.generation);
 
                 addPoints(points);
-                g.balls.splice(i, 1);
+                G.balls.splice(i, 1);
                 return;
             }
         }
@@ -198,7 +199,7 @@ function processCollisions() {
 }
 
 function addPoints(p) {
-    g.points += p;
+    G.points += p;
 }
 
 function distance(ball1, ball2) {
@@ -206,15 +207,15 @@ function distance(ball1, ball2) {
 }
 
 function drawBalls() {
-    for(i=g.balls.length-1; i>=0; i--) {
-        var ball = g.balls[i];
+    for(i=G.balls.length-1; i>=0; i--) {
+        var ball = G.balls[i];
         ball.draw();
     }
 }
 
 function drawTargets() {
-    for(i=g.targets.length-1; i>=0; i--) {
-        var target = g.targets[i];
+    for(i=G.targets.length-1; i>=0; i--) {
+        var target = G.targets[i];
         target.draw();
     }
 }
@@ -239,10 +240,10 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if(g.inGame) {
+    if(G.inGame) {
         clickInGame(evt);
     }
-    if(g.inMenu) {
+    if(G.inMenu) {
         clickInMenu(evt);
     }
 }
@@ -250,17 +251,17 @@ function mouseClicked(evt) {
 function clickInMenu(evt) {
     console.log("New round started");
     startNewRound();
-    g.inGame = true;
-    g.inMenu = false;
+    G.inGame = true;
+    G.inMenu = false;
 }
 
 function clickInGame(evt) {
     console.log("Clicked in-game");
-    if( g.targets.length == 0 && !g.targetSet) {
-        g.targetSet = true;
+    if( G.targets.length == 0 && !G.targetSet) {
+        G.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
         target = new Target(x, y, 20, '#000000');
-        g.targets.push(target);
+        G.targets.push(target);
     }
 }
