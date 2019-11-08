@@ -11,6 +11,8 @@ var ctx;
 var world = {"width": 600, "height": 400};
 var balls = [];
 var gameOver = false;
+var targetBall = null;
+var targetSize = 20;
 var startTime = + new Date();
 var endTime;
 var zoom = 1;
@@ -85,6 +87,7 @@ function drawBalls() {
         var ball = balls[i];
         ball.draw();
     }
+    targetBall.draw();
 }
 
 function startDrag(evt) {
@@ -107,25 +110,11 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    return;
-    clicks += 1;
-    
-    target.x = evt.clientX - canvas.width/2 + pos.x;
-    target.y = evt.clientY - canvas.height/2 + pos.y;
-
-    var dir = new Point(target.x - pos.x, target.y - pos.y);
-    var distance = Math.sqrt(Math.pow(dir.x, 2) + Math.pow(dir.y, 2));
-    if(distance > 0) {
-        avatar.dx += dir.x/distance;
-        avatar.dy += dir.y/distance;
-        avatar.r *= 0.993;
-        thrust.dx = dir.x/distance;
-        thrust.dy = dir.y/distance;
-        thrust.refresh();
+    if( targetBall == null )
+    {
+        x = evt.clientX - canvas.offsetLeft;
+        y = evt.clientY - canvas.offsetTop;
+        targetBall = new Ball(x, y, 0, 0, 20, '#000000');
     }
-
-    console.log(target);
-    targetPointer.x = evt.clientX;
-    targetPointer.y = evt.clientY;
-    targetPointer.refresh();
+    return
 }

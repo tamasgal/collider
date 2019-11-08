@@ -3,13 +3,13 @@ var Point = function(x, y) {
     this.y = y;
 }
 
-var Ball = function(x, y, dx, dy, r) {
+var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.x = x;
     this.y = y;
     this.dx = dx;
     this.dy = dy;
     this.r = r;
-    this.c = '#f55b5b';
+    this.c = c;
 
     this.tick = function() {
         if (this.x + this.dx > world.width - this.r || this.x + this.dx < this.r) {
