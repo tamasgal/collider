@@ -6,13 +6,16 @@
 //
 
 var canvas;
-var n_balls = 32;
+var n_balls = 16;
 var ctx;
 var world = {"width": 600, "height": 400};
 var balls = [];
 var gameOver = false;
 var targets = [];
 var targetSize = 20;
+
+var points = 0;
+var multiplier = 1.1;
 
 var inMenu = true;
 var inGame = false;
@@ -74,6 +77,23 @@ function drawMenu() {
     ctx.fillRect(0, 0, world.width, world.height);
 }
 
+function drawStats() {
+    ctx.lineWidth = '5';
+    ctx.fillStyle = '#000';
+    ctx.strokeStyle = 'white';
+
+    var x0 = 0;
+    var y0 = world.height;
+
+    ctx.fillRect(x0, y0, world.width, 100);
+    ctx.font = "30px Courier";
+    ctx.fillStyle = "#fff";
+    ctx.textBaseline = 'bottom';
+    ctx.textAlign = 'left';
+    ctx.fillText("POINTS " + Math.round(points), x0 + 20, y0 + 40);
+    console.log(points);
+}
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -86,6 +106,7 @@ function update() {
     if(inGame) {
         updateGame();
     }
+    updateStats();
 }
 
 function updateGame() {
@@ -104,6 +125,10 @@ function updateGame() {
 
 function updateMenu() {
     drawMenu();
+}
+
+function updateStats() {
+    drawStats();
 }
 
 function checkIfRoundHasEnded() {
@@ -139,14 +164,25 @@ function tick() {
 
 function processCollisions() {
     var d;
+    var generation;
     for(i=balls.length-1; i>=0; i--) {
         var ball = balls[i];
         for(j=targets.length-1; j>=0; j--) {
             var target = targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
-                new_target = new Target(ball.x, ball.y, 20, '#000000');
+                generation = target.generation + 1
+                new_target = new Target(
+                    ball.x,
+                    ball.y,
+                    20,
+                    '#000000',
+                    100,
+                    generation
+                );
+                console.log(new_target.generation);
                 targets.push(new_target);
+                points += Math.pow(multiplier, target.generation)
                 balls.splice(i, 1);
                 return;
             }
