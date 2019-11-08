@@ -9,7 +9,7 @@ var canvas;
 var ctx;
 
 var G = {
-    "n_balls": 16,
+    "n_balls": 32,
     "world": {"width": 600, "height": 400},
     "balls": [],
     "targets": [],
@@ -98,7 +98,6 @@ function drawStats() {
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
     ctx.fillText("POINTS " + Math.round(G.points_), x0 + 20, y0 + 40);
-    console.log(G.points);
 }
 
 function resizeCanvas() {
@@ -187,7 +186,6 @@ function processCollisions() {
                     1000,
                     generation
                 );
-                console.log(new_target.generation);
                 G.targets.push(new_target);
                 points = Math.pow(G.multiplier, target.generation);
 
