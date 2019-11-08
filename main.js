@@ -11,7 +11,7 @@ var ctx;
 var world = {"width": 600, "height": 400};
 var balls = [];
 var gameOver = false;
-var targetBall = null;
+var targets = [];
 var targetSize = 20;
 var startTime = + new Date();
 var endTime;
@@ -88,10 +88,14 @@ function processCollision() {
     var d;
     for(i=balls.length-1; i>=0; i--) {
         var ball = balls[i];
-        d = distance(ball, targetBall);
-        if(d < ball.r + targetBall.r) {
-            console.log("collision!");
-            return;
+        for(j=targets.length-1; j>=0; j--) {
+            var target = targets[j];
+            d = distance(ball, target);
+            if(d < ball.r + target.r) {
+                console.log("collision!");
+                balls.splice(i, 1);
+                return;
+            }
         }
     }
 }
@@ -105,7 +109,10 @@ function drawBalls() {
         var ball = balls[i];
         ball.draw();
     }
-    targetBall.draw();
+    for(i=targets.length-1; i>=0; i--) {
+        var ball = targets[i];
+        ball.draw();
+    }
 }
 
 function startDrag(evt) {
@@ -128,11 +135,12 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if( targetBall == null )
+    if( targets.length == 0 )
     {
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        targetBall = new Ball(x, y, 0, 0, 20, '#000000');
+        target = new Ball(x, y, 0, 0, 20, '#000000');
+        targets.push(target);
     }
     return
 }
