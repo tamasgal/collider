@@ -160,7 +160,7 @@ function mouseClicked(evt) {
     {
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        target = new Target(x, y, 0, 0, 20, '#000000');
+        target = new Target(x, y, 20, '#000000');
         targets.push(target);
     }
     return
