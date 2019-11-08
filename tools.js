@@ -6,6 +6,5 @@ function rgba(r, g, b, a, offset=100) {
     r = offset + Math.round(r * s);
     g = offset + Math.round(g * s);
     b = offset + Math.round(b * s);
-    console.log('rgba('+r+','+g+','+b+','+a+')');
     return 'rgba('+r+','+g+','+b+','+a+')';
 }

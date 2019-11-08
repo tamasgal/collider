@@ -26,9 +26,11 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
 
     this.draw = function() {
         ctx.beginPath();
+        ctx.globalAlpha = 0.8;
         ctx.fillStyle = this.c;
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
+        ctx.globalAlpha = 1.0;
     }
 }
 
@@ -51,7 +53,7 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=1000, generation=1) {
 
     this.draw = function() {
         var a = this.lifetime / this.original_lifetime;
-        var r = Math.round(this.generation / G.n_balls);
+        var r = this.generation / G.n_balls;
         var g = 0;
         var b = 1 - r;
         ctx.beginPath();
