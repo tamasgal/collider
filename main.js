@@ -6,21 +6,22 @@
 //
 
 var canvas;
-var n_balls = 16;
 var ctx;
-var world = {"width": 600, "height": 400};
-var balls = [];
-var gameOver = false;
-var targets = [];
-var targetSize = 20;
 
-var points = 0;
-var points_ = points;
-var multiplier = 1.1;
+var g = {
+    "n_balls": 16,
+    "world": {"width": 600, "height": 400},
+    "balls": [],
+    "targets": [],
 
-var inMenu = true;
-var inGame = false;
-var targetSet = false;
+    "points": 0,
+    "points_": 0,
+    "multiplier": 1.1,
+
+    "inMenu": true,
+    "inGame": false,
+    "targetSet": false
+}
 
 
 window.onload = function() {
@@ -50,15 +51,15 @@ function startNewRound() {
 
 function createBalls()  {
     var x, y, r, v;
-    for(i=0; i<n_balls; i++) {
+    for(i=0; i<g.n_balls; i++) {
         r = 10;
-        x = (world.width - 2 * r) * Math.random() + r;
-        y = (world.height - 2 * r) * Math.random() + r;
+        x = (g.world.width - 2 * r) * Math.random() + r;
+        y = (g.world.height - 2 * r) * Math.random() + r;
         d = Math.random() * Math.PI;
         v = Math.random() * 5 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
-        balls.push( new Ball(x, y, dx, dy, r) );
+        g.balls.push( new Ball(x, y, dx, dy, r) );
     }
 }
 
@@ -67,7 +68,7 @@ function drawCanvas() {
     ctx.fillStyle = '#f2eded';
     ctx.strokeStyle = 'white';
 
-    ctx.fillRect(0, 0, world.width, world.height);
+    ctx.fillRect(0, 0, g.world.width, g.world.height);
 }
 
 function drawMenu() {
@@ -75,7 +76,7 @@ function drawMenu() {
     ctx.fillStyle = '#122389';
     ctx.strokeStyle = 'white';
 
-    ctx.fillRect(0, 0, world.width, world.height);
+    ctx.fillRect(0, 0, g.world.width, g.world.height);
 }
 
 function drawStats() {
@@ -84,18 +85,18 @@ function drawStats() {
     ctx.strokeStyle = 'white';
 
     var x0 = 0;
-    var y0 = world.height;
+    var y0 = g.world.height;
 
-    if(points > points_) {
-        points_ += Math.round((points - points_) / 2);
+    if(g.points > g.points_) {
+        g.points_ += Math.round((g.points - g.points_) / 2);
     }
-    ctx.fillRect(x0, y0, world.width, 100);
+    ctx.fillRect(x0, y0, g.world.width, 100);
     ctx.font = "bold 30px Courier";
     ctx.fillStyle = "#fff";
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
-    ctx.fillText("POINTS " + Math.round(points_), x0 + 20, y0 + 40);
-    console.log(points);
+    ctx.fillText("POINTS " + Math.round(g.points_), x0 + 20, y0 + 40);
+    console.log(g.points);
 }
 
 function resizeCanvas() {
@@ -104,10 +105,10 @@ function resizeCanvas() {
 }
 
 function update() {
-    if(inMenu) {
+    if(g.inMenu) {
         updateMenu();
     }
-    if(inGame) {
+    if(g.inGame) {
         updateGame();
     }
     updateStats();
@@ -121,9 +122,9 @@ function updateGame() {
     processCollisions();
     cleanUp();
     if(checkIfRoundHasEnded()) {
-        inGame = false;
-        inMenu = true;
-        targetSet = false;
+        g.inGame = false;
+        g.inMenu = true;
+        g.targetSet = false;
     }
 }
 
@@ -136,7 +137,7 @@ function updateStats() {
 }
 
 function checkIfRoundHasEnded() {
-    if(targetSet && targets.length == 0) {
+    if(g.targetSet && g.targets.length == 0) {
         return true;
     }
     return false;
@@ -144,24 +145,24 @@ function checkIfRoundHasEnded() {
 
 function cleanUp() {
     var indices = [];
-    for(i=targets.length-1; i>=0; i--) {
-        var target = targets[i];
+    for(i=g.targets.length-1; i>=0; i--) {
+        var target = g.targets[i];
         if(target.lifetime <= 0) {
             indices.push(i);
         }
     }
     for(i=indices.length-1; i>=0; i--) {
-        targets.splice(indices[i], 1);
+        g.targets.splice(indices[i], 1);
     }
 }
 
 function tick() {
-    for(i=balls.length-1; i>=0; i--) {
-        var ball = balls[i];
+    for(i=g.balls.length-1; i>=0; i--) {
+        var ball = g.balls[i];
         ball.tick();
     }
-    for(i=targets.length-1; i>=0; i--) {
-        var target = targets[i];
+    for(i=g.targets.length-1; i>=0; i--) {
+        var target = g.targets[i];
         target.tick();
     }
 }
@@ -169,10 +170,10 @@ function tick() {
 function processCollisions() {
     var d;
     var generation;
-    for(i=balls.length-1; i>=0; i--) {
-        var ball = balls[i];
-        for(j=targets.length-1; j>=0; j--) {
-            var target = targets[j];
+    for(i=g.balls.length-1; i>=0; i--) {
+        var ball = g.balls[i];
+        for(j=g.targets.length-1; j>=0; j--) {
+            var target = g.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
                 generation = target.generation + 1
@@ -185,9 +186,9 @@ function processCollisions() {
                     generation
                 );
                 console.log(new_target.generation);
-                targets.push(new_target);
-                addPoints(Math.pow(multiplier, target.generation));
-                balls.splice(i, 1);
+                g.targets.push(new_target);
+                addPoints(Math.pow(g.multiplier, target.generation));
+                g.balls.splice(i, 1);
                 return;
             }
         }
@@ -195,7 +196,7 @@ function processCollisions() {
 }
 
 function addPoints(p) {
-    points += p;
+    g.points += p;
 }
 
 function distance(ball1, ball2) {
@@ -203,15 +204,15 @@ function distance(ball1, ball2) {
 }
 
 function drawBalls() {
-    for(i=balls.length-1; i>=0; i--) {
-        var ball = balls[i];
+    for(i=g.balls.length-1; i>=0; i--) {
+        var ball = g.balls[i];
         ball.draw();
     }
 }
 
 function drawTargets() {
-    for(i=targets.length-1; i>=0; i--) {
-        var target = targets[i];
+    for(i=g.targets.length-1; i>=0; i--) {
+        var target = g.targets[i];
         target.draw();
     }
 }
@@ -236,10 +237,10 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if(inGame) {
+    if(g.inGame) {
         clickInGame(evt);
     }
-    if(inMenu) {
+    if(g.inMenu) {
         clickInMenu(evt);
     }
 }
@@ -247,17 +248,17 @@ function mouseClicked(evt) {
 function clickInMenu(evt) {
     console.log("New round started");
     startNewRound();
-    inGame = true;
-    inMenu = false;
+    g.inGame = true;
+    g.inMenu = false;
 }
 
 function clickInGame(evt) {
     console.log("Clicked in-game");
-    if( targets.length == 0 && !targetSet) {
-        targetSet = true;
+    if( g.targets.length == 0 && !g.targetSet) {
+        g.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
         target = new Target(x, y, 20, '#000000');
-        targets.push(target);
+        g.targets.push(target);
     }
 }

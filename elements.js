@@ -12,10 +12,10 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.c = c;
 
     this.tick = function() {
-        if (this.x + this.dx > world.width - this.r || this.x + this.dx < this.r) {
+        if (this.x + this.dx > g.world.width - this.r || this.x + this.dx < this.r) {
             this.dx = -this.dx;
         }
-        if (this.y + this.dy > world.height - this.r || this.y + this.dy < this.r) {
+        if (this.y + this.dy > g.world.height - this.r || this.y + this.dy < this.r) {
             this.dy = -this.dy;
         }
         x = this.x + this.dx;
