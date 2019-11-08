@@ -52,7 +52,6 @@ function createBalls()  {
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
         balls.push( new Ball(x, y, dx, dy, r) );
-        console.log(x, y);
     }
 }
 
