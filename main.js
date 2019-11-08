@@ -110,7 +110,8 @@ function processCollisions() {
             var target = targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
-                console.log("collision!");
+                new_target = new Target(ball.x, ball.y, 20, '#000000');
+                targets.push(new_target);
                 balls.splice(i, 1);
                 return;
             }
