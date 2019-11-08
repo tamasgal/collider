@@ -73,6 +73,8 @@ function update() {
     tick();
     drawCanvas();
     drawBalls();
+
+    processCollision();
 }
 
 function tick() {
@@ -80,6 +82,22 @@ function tick() {
         var ball = balls[i];
         ball.tick();
     }
+}
+
+function processCollision() {
+    var d;
+    for(i=balls.length-1; i>=0; i--) {
+        var ball = balls[i];
+        d = distance(ball, targetBall);
+        if(d < ball.r + targetBall.r) {
+            console.log("collision!");
+            return;
+        }
+    }
+}
+
+function distance(ball1, ball2) {
+    return Math.sqrt(Math.pow(ball1.x - ball2.x, 2) + Math.pow(ball1.y - ball2.y, 2));
 }
 
 function drawBalls() {
