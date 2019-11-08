@@ -43,6 +43,9 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
 
     this.tick = function() {
         this.lifetime -= 1;
+        if(this.lifetime > 90) {
+            this.r += Math.cos(this.lifetime) * 2;
+        }
     }
 
     this.draw = function() {
