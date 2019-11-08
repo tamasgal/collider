@@ -13,11 +13,9 @@ var balls = [];
 var gameOver = false;
 var targets = [];
 var targetSize = 20;
-var startTime = + new Date();
-var endTime;
-var zoom = 1;
-var zooming = false;
-var outro = false;
+
+var roundStarted = false;
+
 
 window.onload = function() {
     canvas = document.getElementById("canvas");
@@ -38,6 +36,9 @@ window.onload = function() {
 function initialise() {
     window.addEventListener('resize', resizeCanvas, false);
     resizeCanvas();
+}
+
+function startNewRound() {
     createBalls();
 }
 
@@ -63,6 +64,14 @@ function drawCanvas() {
     ctx.fillRect(0, 0, world.width, world.height);
 }
 
+function drawMenu() {
+    ctx.lineWidth = '5';
+    ctx.fillStyle = '#122389';
+    ctx.strokeStyle = 'white';
+
+    ctx.fillRect(0, 0, world.width, world.height);
+}
+
 function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
@@ -70,11 +79,30 @@ function resizeCanvas() {
 
 function update() {
     tick();
+    if(checkIfRoundHasEnded()) {
+        updateMenu();
+    } else {
+        updateGame();
+    }
+}
+
+function updateGame() {
     drawCanvas();
     drawBalls();
     drawTargets();
     processCollisions();
     cleanUp();
+}
+
+function updateMenu() {
+    drawMenu();
+}
+
+function checkIfRoundHasEnded() {
+    if(roundStarted && targets.length == 0) {
+        return true;
+    }
+    return false;
 }
 
 function cleanUp() {
@@ -156,12 +184,24 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if( targets.length == 0 )
+    if( targets.length == 0 && !roundStarted)
     {
-        x = evt.clientX - canvas.offsetLeft;
-        y = evt.clientY - canvas.offsetTop;
-        target = new Target(x, y, 20, '#000000');
-        targets.push(target);
+        clickInGame(evt);
     }
+    clickInMenu(evt);
     return
+}
+
+function clickInMenu(evt) {
+    console.log("New round started");
+    roundStarted = true;
+    startNewRound();
+}
+
+function clickInGame(evt) {
+    roundStarted = true;
+    x = evt.clientX - canvas.offsetLeft;
+    y = evt.clientY - canvas.offsetTop;
+    target = new Target(x, y, 20, '#000000');
+    targets.push(target);
 }

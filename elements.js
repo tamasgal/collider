@@ -27,7 +27,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.draw = function() {
         ctx.beginPath();
         ctx.fillStyle = this.c;
-        ctx.arc(this.x, this.y, this.r*zoom, 0, 2*Math.PI);
+        ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
     }
 }
@@ -47,7 +47,7 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100) {
     this.draw = function() {
         ctx.beginPath();
         ctx.fillStyle = this.c;
-        ctx.arc(this.x, this.y, this.r*zoom, 0, 2*Math.PI);
+        ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
     }
 }
