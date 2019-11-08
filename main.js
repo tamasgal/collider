@@ -186,7 +186,7 @@ function processCollisions() {
                 );
                 console.log(new_target.generation);
                 targets.push(new_target);
-                addPoints(Math.pow(multiplier, target.generation) * 1000);
+                addPoints(Math.pow(multiplier, target.generation));
                 balls.splice(i, 1);
                 return;
             }
