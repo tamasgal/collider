@@ -56,7 +56,6 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
         var b = 255 - r;
         ctx.beginPath();
         ctx.fillStyle = 'rgb(' + r + ', ' + g + ', ' + b + ', ' + a + ')';
-        console.log(fillStyle);
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
         ctx.font = "bold 15px Courier";
