@@ -86,7 +86,7 @@ function drawStats() {
     var y0 = world.height;
 
     ctx.fillRect(x0, y0, world.width, 100);
-    ctx.font = "30px Courier";
+    ctx.font = "bold 30px Courier";
     ctx.fillStyle = "#fff";
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';

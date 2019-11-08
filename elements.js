@@ -55,7 +55,7 @@ var Target = function(x, y, r, c='#f55b5b', lifetime=100, generation=1) {
         ctx.fillStyle = 'rgb(0, 0, 0, ' + a + ')';
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
-        ctx.font = "15px Courier";
+        ctx.font = "bold 15px Courier";
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillStyle = 'rgb(255, 0, 0, ' + a + ')';
