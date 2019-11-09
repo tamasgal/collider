@@ -59,7 +59,7 @@ function initialise() {
 function initGUI() {
     G.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
     G.buttons.push(new ValueButton("+MULTIPLIER", 50, 100, 100, 20, "multiplier", function() {
-        var cost = Math.pow(((G.multiplier - 1)*10), 2);
+        var cost = Math.pow(((G.multiplier - 1)*10), 4);
         if (G.points >=cost) {
         G.multiplier += .1;
         addPoints(-cost);
