@@ -18,6 +18,13 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
         if (this.y + this.dy > G.world.height - this.r || this.y + this.dy < this.r) {
             this.dy = -this.dy;
         }
+        if(G.magnet.factor > 0 && G.targets.length > 0) {
+            dist = distance(G.magnet, this);
+            mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 1000;
+            mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 1000;
+            this.dx += mdx;
+            this.dy += mdy;
+        }
         x = this.x + this.dx;
         y = this.y + this.dy;
         this.x = x;
@@ -35,13 +42,13 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
 }
 
 
-var Target = function(x, y, r, lifetime, generation=1) {
+var Target = function(x, y, r, lifetime, chain=1) {
     this.x = x;
     this.y = y;
     this.r = r;
     this.lifetime = lifetime;
     this.original_lifetime = lifetime;
-    this.generation = generation;
+    this.chain = chain;
 
     this.tick = function() {
         this.lifetime -= 1;
@@ -52,7 +59,7 @@ var Target = function(x, y, r, lifetime, generation=1) {
 
     this.draw = function() {
         var a = this.lifetime / this.original_lifetime;
-        var r = this.generation / G.n_balls;
+        var r = this.chain / G.n_balls;
         var g = 0;
         var b = 1 - r;
         ctx.beginPath();
@@ -63,6 +70,6 @@ var Target = function(x, y, r, lifetime, generation=1) {
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         ctx.fillStyle = 'rgb(255, 255, 255, ' + a + ')';
-        ctx.fillText(this.generation, this.x, this.y);
+        ctx.fillText(this.chain, this.x, this.y);
     }
 }

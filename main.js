@@ -29,12 +29,16 @@ var G = {
     "multiplier": 1.1,
     "lifetime": 100,
     "targetSize": 20,
+    "magnet": {"x": 0, "y": 0, "factor": 0},
 
     "inMenu": true,
     "inGame": false,
     "targetSet": false,
 
-    "buttons": []
+    "buttons": [],
+
+    "longestChain": 1,
+    "longestChainInRound": 1,
 }
 
 
@@ -114,10 +118,24 @@ function initGUI() {
             }
         )
     );
+    G.buttons.push(
+        new UpgradeButton("MAGNET", 50, 200, 200, 20,
+            displayValue = function() {
+                return G.magnet.factor;
+            },
+            upgrade = function() {
+                G.magnet.factor += 1;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(level + 1, 10);
+            }
+        )
+    );
 }
 
 function startNewRound() {
     G.balls = [];
+    G.longestChainInRound = 1,
     createBalls();
 }
 
@@ -181,6 +199,7 @@ function drawStats() {
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
     ctx.fillText("POINTS " + Math.round(G.points_), x0 + 20, y0 + 40);
+    ctx.fillText("LONGEST CHAIN " + G.longestChain, x0 + 20, y0 + 70);
 }
 
 function resizeCanvas() {
@@ -253,23 +272,31 @@ function tick() {
 
 function processCollisions() {
     var d;
-    var generation;
+    var chain;
     for(i=G.balls.length-1; i>=0; i--) {
         var ball = G.balls[i];
         for(j=G.targets.length-1; j>=0; j--) {
             var target = G.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
-                generation = target.generation + 1
+                chain = target.chain + 1
+                if(chain > G.longestChain) {
+                    G.longestChain = chain;
+                }
+                if(chain > G.longestChainInRound) {
+                    G.longestChainInRound = chain;
+                    G.magnet.x = ball.x;
+                    G.magnet.y = ball.y;
+                }
                 new_target = new Target(
                     ball.x,
                     ball.y,
                     G.targetSize,
                     G.lifetime,
-                    generation
+                    chain
                 );
                 G.targets.push(new_target);
-                points = Math.pow(G.multiplier, target.generation);
+                points = Math.pow(G.multiplier, target.chain);
 
                 addPoints(points);
                 G.balls.splice(i, 1);
@@ -283,8 +310,8 @@ function addPoints(p) {
     G.points += Math.ceil(p);
 }
 
-function distance(ball1, ball2) {
-    return Math.sqrt(Math.pow(ball1.x - ball2.x, 2) + Math.pow(ball1.y - ball2.y, 2));
+function distance(thing1, thing2) {
+    return Math.sqrt(Math.pow(thing1.x - thing2.x, 2) + Math.pow(thing1.y - thing2.y, 2));
 }
 
 function drawBalls() {
@@ -352,5 +379,7 @@ function clickInGame(evt) {
         y = evt.clientY - canvas.offsetTop;
         target = new Target(x, y, G.targetSize, G.lifetime);
         G.targets.push(target);
+        G.magnet.x = x;
+        G.magnet.y = y;
     }
 }
