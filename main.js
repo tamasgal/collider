@@ -233,7 +233,7 @@ function updateGame() {
 }
 
 function updateMagnet() {
-    if(G.magnet.factor == 0) {
+    if(G.magnet.factor == 0 || G.targets.length == 0) {
         return;
     }
     var index = 0;
