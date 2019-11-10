@@ -27,18 +27,18 @@ var Button = function(text, x, y, width, height, callback) {
     this.hover = function() {}
 }
 
-// A button for upgrade. The `callback` is called when the button is clicked
+// A button for upgrade. The `upgrade` is called when the button is clicked
 // and the upgrade is affordable. The cost is automatically subtracted from
-// the points, so `callback` only has to implement the actual effect.
+// the points, so `upgrade` only has to implement the actual effect.
 // The `upgradeCost(level)` function returns the cost of the upgrade for
 // the given level.
-var UpgradeButton = function(text, x, y, width, height, displayValue, callback, upgradeCost) {
+var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, upgradeCost) {
     this.text = text;
     this.x = x;
     this.y = y;
     this.width = width;
     this.height = height;
-    this.callback = callback;
+    this.upgrade = upgrade;
     this.displayValue = displayValue;
     this.level = 0;
     this.upgradeCost = upgradeCost;
@@ -62,11 +62,14 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, callback, 
     }
 
     this.click = function() {
-        var cost = this.upgradeCost(this.level + 1);
+        var cost = this.nextUpgrade();
+        console.log("cost for upgrade: " + cost);
         if(G.points >= cost) {
+            console.log("points before: " + G.points);
             addPoints(-cost);
+            console.log("points after: " + G.points);
             this.level += 1;
-            this.callback();
+            this.upgrade();
         }
     }
     this.hover = function(x, y) {

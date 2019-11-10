@@ -67,7 +67,7 @@ function initGUI() {
             displayValue = function() {
                 return G.multiplier.toPrecision(2);
             },
-            callback = function() {
+            upgrade = function() {
                 G.multiplier += .1;
             },
             upgradeCost = function(level) {
@@ -80,7 +80,7 @@ function initGUI() {
             displayValue = function() {
                 return G.n_balls;
             },
-            callback = function() {
+            upgrade = function() {
                 G.n_balls += 1;
             },
             upgradeCost = function(level) {
@@ -93,7 +93,7 @@ function initGUI() {
             displayValue = function() {
                 return G.targetSize;
             },
-            callback = function() {
+            upgrade = function() {
                 G.targetSize += 1;
             },
             upgradeCost = function(level) {
@@ -106,7 +106,7 @@ function initGUI() {
             displayValue = function() {
                 return G.lifetime;
             },
-            callback = function() {
+            upgrade = function() {
                 G.lifetime += 10;
             },
             upgradeCost = function(level) {
@@ -168,8 +168,12 @@ function drawStats() {
     var x0 = 0;
     var y0 = G.world.height;
 
-    if(G.points > G.points_) {
-        G.points_ += Math.round((G.points - G.points_) / 2);
+    if(G.points != G.points_) {
+        if(Math.abs(G.points - G.points_) < 10) {
+            G.points_ = G.points;
+        } else {
+            G.points_ += Math.round((G.points - G.points_) / 2);
+        }
     }
     ctx.fillRect(x0, y0, G.world.width, 100);
     ctx.font = "bold 30px Courier";
@@ -276,7 +280,7 @@ function processCollisions() {
 }
 
 function addPoints(p) {
-    G.points += p;
+    G.points += Math.ceil(p);
 }
 
 function distance(ball1, ball2) {
@@ -304,18 +308,6 @@ function startDrag(evt) {
 function stopDrag(evt) {
     drag = false;
 }
-
-// function mouseOver(evt) {
-//     if(!G.inMenu) {
-//         return;
-//     }
-//     for(i=G.buttons.length-1; i>=0; i--) {
-//         var button = G.buttons[i];
-//         if(isInside(G.mouse.x, G.mouse.y, button)) {
-//             button.hover(x, y);
-//         }
-//     }
-// }
 
 function mouseMoved(evt) {
     if(!G.inMenu) {
