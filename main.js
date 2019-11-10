@@ -124,11 +124,11 @@ function startNewRound() {
 function createBalls()  {
     var x, y, r, v;
     for(i=0; i<G.n_balls; i++) {
-        r = 10;
+        r = 5;
         x = (G.world.width - 2 * r) * Math.random() + r;
         y = (G.world.height - 2 * r) * Math.random() + r;
         d = Math.random() * Math.PI;
-        v = Math.random() * 5 + 1;
+        v = Math.random() * 3 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
         G.balls.push( new Ball(x, y, dx, dy, r) );
