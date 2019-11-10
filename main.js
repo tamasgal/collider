@@ -223,12 +223,32 @@ function updateGame() {
     drawBalls();
     drawTargets();
     processCollisions();
+    updateMagnet();
     cleanUp();
     if(checkIfRoundHasEnded()) {
         G.inGame = false;
         G.inMenu = true;
         G.targetSet = false;
     }
+}
+
+function updateMagnet() {
+    if(G.magnet.factor == 0) {
+        return;
+    }
+    var index = 0;
+    var highestLifetime = 0;
+    for(i=G.targets.length-1; i>=0; i--) {
+        var target = G.targets[i];
+        if(target.chain == G.longestChainInRound) {
+            if(target.lifetime > highestLifetime) {
+                index = i;
+                highestLifetime = target.lifetime;
+            }
+        }
+    }
+    G.magnet.x = G.targets[index].x;
+    G.magnet.y = G.targets[index].y;
 }
 
 function updateMenu() {
@@ -285,8 +305,6 @@ function processCollisions() {
                 }
                 if(chain > G.longestChainInRound) {
                     G.longestChainInRound = chain;
-                    G.magnet.x = ball.x;
-                    G.magnet.y = ball.y;
                 }
                 new_target = new Target(
                     ball.x,

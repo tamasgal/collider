@@ -63,11 +63,8 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
 
     this.click = function() {
         var cost = this.nextUpgrade();
-        console.log("cost for upgrade: " + cost);
         if(G.points >= cost) {
-            console.log("points before: " + G.points);
             addPoints(-cost);
-            console.log("points after: " + G.points);
             this.level += 1;
             this.upgrade();
         }
