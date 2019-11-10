@@ -11,14 +11,18 @@ var ctx;
 var C = {
     "button": "steelblue",
     "button_clicked": "red",
-    "button_text": "white"
+    "button_text": "white",
+    "upgrade_button_active": rgba(0, 0.8, 0, 1.0),
+    "upgrade_button_inactive": rgba(0.8, 0, 0, 1.0),
 }
 
 var G = {
-    "n_balls": 32,
+    "n_balls": 16,
     "world": {"width": 600, "height": 400},
     "balls": [],
     "targets": [],
+
+    "mouse": {"x": 0, "y": 0},
 
     "points": 0,
     "points_": 0,
@@ -57,14 +61,59 @@ function initialise() {
 }
 
 function initGUI() {
-    G.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
-    G.buttons.push(new ValueButton("+MULTIPLIER", 50, 100, 100, 20, "multiplier", function() {
-        var cost = Math.pow(2, ((G.multiplier - 1)*10));
-        if (G.points >=cost) {
-        G.multiplier += .1;
-        addPoints(-cost);
-      }
-    }));
+    G.buttons.push(new Button("NEW ROUND", 50, 50, 200, 20, clickNewRound));
+    G.buttons.push(
+        new UpgradeButton("MULTIPLIER", 50, 100, 200, 20,
+            displayValue = function() {
+                return G.multiplier.toPrecision(2);
+            },
+            callback = function() {
+                G.multiplier += .1;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(level, 2);
+            }
+        )
+    );
+    G.buttons.push(
+        new UpgradeButton("BALLS", 50, 125, 200, 20,
+            displayValue = function() {
+                return G.n_balls;
+            },
+            callback = function() {
+                G.n_balls += 1;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(level, 4);
+            }
+        )
+    );
+    G.buttons.push(
+        new UpgradeButton("TARGET SIZE", 50, 150, 200, 20,
+            displayValue = function() {
+                return G.targetSize;
+            },
+            callback = function() {
+                G.targetSize += 1;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(level, 3);
+            }
+        )
+    );
+    G.buttons.push(
+        new UpgradeButton("LIFETIME", 50, 175, 200, 20,
+            displayValue = function() {
+                return G.lifetime;
+            },
+            callback = function() {
+                G.lifetime += 10;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(level, 3);
+            }
+        )
+    );
 }
 
 function startNewRound() {
@@ -105,6 +154,9 @@ function drawMenu() {
     for(i=G.buttons.length-1; i>=0; i--) {
         var button = G.buttons[i];
         button.draw();
+        if(isInside(G.mouse.x, G.mouse.y, button)) {
+            button.hover(G.mouse.x, G.mouse.y);
+        }
     }
 }
 
@@ -124,7 +176,7 @@ function drawStats() {
     ctx.fillStyle = "#fff";
     ctx.textBaseline = 'bottom';
     ctx.textAlign = 'left';
-    ctx.fillText("POINTS " + Math.round(G.points), x0 + 20, y0 + 40);
+    ctx.fillText("POINTS " + Math.round(G.points_), x0 + 20, y0 + 40);
 }
 
 function resizeCanvas() {
@@ -253,15 +305,24 @@ function stopDrag(evt) {
     drag = false;
 }
 
+// function mouseOver(evt) {
+//     if(!G.inMenu) {
+//         return;
+//     }
+//     for(i=G.buttons.length-1; i>=0; i--) {
+//         var button = G.buttons[i];
+//         if(isInside(G.mouse.x, G.mouse.y, button)) {
+//             button.hover(x, y);
+//         }
+//     }
+// }
+
 function mouseMoved(evt) {
-    return;
-    if(drag) {
-        target.x = evt.offsetX - canvas.width/2 + pos.x;
-        target.y = evt.offsetY - canvas.height/2 + pos.y;
-        targetPointer.x = evt.offsetX;
-        targetPointer.y = evt.offsetY;
-        targetPointer.refresh();
+    if(!G.inMenu) {
+        return;
     }
+    G.mouse.x = evt.clientX - canvas.offsetLeft;
+    G.mouse.y = evt.clientY - canvas.offsetTop;
 }
 
 function mouseClicked(evt) {
@@ -279,7 +340,7 @@ function clickInMenu(evt) {
     for(i=G.buttons.length-1; i>=0; i--) {
         var button = G.buttons[i];
         if(isInside(x, y, button)) {
-            button.callback();
+            button.click();
         }
     }
 }
