@@ -37,8 +37,8 @@ var G = {
 
     "buttons": [],
 
-    "longestChain": 1,
-    "longestChainInRound": 1,
+    "longestChain": 0,
+    "longestChainInRound": 0,
 }
 
 
@@ -135,7 +135,7 @@ function initGUI() {
 
 function startNewRound() {
     G.balls = [];
-    G.longestChainInRound = 1,
+    G.longestChainInRound = 0,
     createBalls();
 }
 
