@@ -20,9 +20,6 @@ var C = {
 var DEFAULT_G = {
     "n_balls": 16,
     "world": {"width": 600, "height": 400},
-    "balls": [],
-    "targets": [],
-
     "mouse": {"x": 0, "y": 0},
 
     "points": 0,
@@ -44,6 +41,11 @@ var DEFAULT_G = {
     "longestChainInRound": 0,
 
     "upgradeFactor": 1,
+}
+
+var S = {
+    "balls": [],
+    "targets": [],
 }
 
 var G;
@@ -248,8 +250,8 @@ function initGUI() {
 }
 
 function startNewRound() {
-    G.balls = [];
-    G.targets = [];
+    S.balls = [];
+    S.targets = [];
     G.longestChainInRound = 0,
     G.timewarpFuel = G.timewarp,
     createBalls();
@@ -265,7 +267,7 @@ function createBalls()  {
         v = Math.random() * 3 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
-        G.balls.push( new Ball(x, y, dx, dy, r) );
+        S.balls.push( new Ball(x, y, dx, dy, r) );
     }
 }
 
@@ -363,13 +365,13 @@ function drawOverlay() {
 }
 
 function updateMagnet() {
-    if(G.magnet.factor == 0 || G.targets.length == 0) {
+    if(G.magnet.factor == 0 || S.targets.length == 0) {
         return;
     }
     var index = 0;
     var highestLifetime = 0;
-    for(i=G.targets.length-1; i>=0; i--) {
-        var target = G.targets[i];
+    for(i=S.targets.length-1; i>=0; i--) {
+        var target = S.targets[i];
         if(target.chain == G.longestChainInRound) {
             if(target.lifetime > highestLifetime) {
                 index = i;
@@ -377,8 +379,8 @@ function updateMagnet() {
             }
         }
     }
-    G.magnet.x = G.targets[index].x;
-    G.magnet.y = G.targets[index].y;
+    G.magnet.x = S.targets[index].x;
+    G.magnet.y = S.targets[index].y;
 }
 
 function updateMenu() {
@@ -390,7 +392,7 @@ function updateStats() {
 }
 
 function checkIfRoundHasEnded() {
-    if(G.targetSet && (G.targets.length == 0 || G.balls.length == 0)) {
+    if(G.targetSet && (S.targets.length == 0 || S.balls.length == 0)) {
         return true;
     }
     return false;
@@ -398,24 +400,24 @@ function checkIfRoundHasEnded() {
 
 function cleanUp() {
     var indices = [];
-    for(i=G.targets.length-1; i>=0; i--) {
-        var target = G.targets[i];
+    for(i=S.targets.length-1; i>=0; i--) {
+        var target = S.targets[i];
         if(target.lifetime <= 0) {
             indices.push(i);
         }
     }
     for(i=indices.length-1; i>=0; i--) {
-        G.targets.splice(indices[i], 1);
+        S.targets.splice(indices[i], 1);
     }
 }
 
 function tick() {
-    for(i=G.balls.length-1; i>=0; i--) {
-        var ball = G.balls[i];
+    for(i=S.balls.length-1; i>=0; i--) {
+        var ball = S.balls[i];
         ball.tick();
     }
-    for(i=G.targets.length-1; i>=0; i--) {
-        var target = G.targets[i];
+    for(i=S.targets.length-1; i>=0; i--) {
+        var target = S.targets[i];
         target.tick();
     }
 }
@@ -423,10 +425,10 @@ function tick() {
 function processCollisions() {
     var d;
     var chain;
-    for(i=G.balls.length-1; i>=0; i--) {
-        var ball = G.balls[i];
-        for(j=G.targets.length-1; j>=0; j--) {
-            var target = G.targets[j];
+    for(i=S.balls.length-1; i>=0; i--) {
+        var ball = S.balls[i];
+        for(j=S.targets.length-1; j>=0; j--) {
+            var target = S.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
                 chain = target.chain + 1
@@ -441,11 +443,11 @@ function processCollisions() {
                     ball.y,
                     chain
                 );
-                G.targets.push(new_target);
+                S.targets.push(new_target);
                 points = Math.pow(G.multiplier, target.chain);
 
                 addPoints(points);
-                G.balls.splice(i, 1);
+                S.balls.splice(i, 1);
                 return;
             }
         }
@@ -461,15 +463,15 @@ function distance(thing1, thing2) {
 }
 
 function drawBalls() {
-    for(i=G.balls.length-1; i>=0; i--) {
-        var ball = G.balls[i];
+    for(i=S.balls.length-1; i>=0; i--) {
+        var ball = S.balls[i];
         ball.draw();
     }
 }
 
 function drawTargets() {
-    for(i=G.targets.length-1; i>=0; i--) {
-        var target = G.targets[i];
+    for(i=S.targets.length-1; i>=0; i--) {
+        var target = S.targets[i];
         target.draw();
     }
 }
@@ -519,12 +521,12 @@ function clickNewRound() {
 
 function clickInGame(evt) {
     console.log("Clicked in-game");
-    if( G.targets.length == 0 && !G.targetSet) {
+    if( S.targets.length == 0 && !G.targetSet) {
         G.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
         target = new Target(x, y);
-        G.targets.push(target);
+        S.targets.push(target);
         G.magnet.x = x;
         G.magnet.y = y;
     }

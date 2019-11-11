@@ -27,7 +27,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
             dy = this.dy / G.timewarpFactor;
         }
 
-        if(G.magnet.factor > 0 && G.targets.length > 0) {
+        if(G.magnet.factor > 0 && S.targets.length > 0) {
             dist = distance(G.magnet, this);
             mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 1000;
             mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 1000;
