@@ -344,7 +344,7 @@ function updateGame() {
         G.inGame = false;
         G.inMenu = true;
         G.targetSet = false;
-        G.saveState();
+        saveState();
     }
 }
 
