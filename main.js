@@ -90,6 +90,7 @@ function restoreState() {
     if(cookie_index != -1) {
         console.log("Restoring game state...");
         G = JSON.parse(getCookie('G'));
+        console.log(G);
     } else {
         G = DEFAULT_G;
     }
