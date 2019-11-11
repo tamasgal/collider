@@ -40,12 +40,14 @@ var G = {
     "inGame": false,
     "targetSet": false,
 
-    "buttons": [],
-
     "longestChain": 0,
     "longestChainInRound": 0,
 
     "upgradeFactor": 1,
+}
+
+var GUI = {
+    "buttons": [],
 }
 
 var KEY = {
@@ -68,13 +70,13 @@ window.onload = function() {
     document.addEventListener("keyup", keyUp);
     canvas.addEventListener("click", mouseClicked);
 
-    // restoreState();
+    restoreState();
 
     initialise();
 
     var fps = 60.;
     setInterval(update, 1000/fps);
-    // setInterval(saveState, 2000);
+    setInterval(saveState, 2000);
 
 }
 
@@ -140,8 +142,8 @@ function initialise() {
 // }
 
 function initGUI() {
-    G.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
-    G.buttons.push(
+    GUI.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
+    GUI.buttons.push(
         new UpgradeButton("MULTIPLIER", 50, 100, 220, 20,
             displayValue = function() {
                 return G.multiplier.toPrecision(2);
@@ -154,7 +156,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("BALLS", 50, 125, 220, 20,
             displayValue = function() {
                 return G.n_balls;
@@ -167,7 +169,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("TARGET SIZE", 50, 150, 220, 20,
             displayValue = function() {
                 return G.targetSize;
@@ -180,7 +182,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("LIFETIME", 50, 175, 220, 20,
             displayValue = function() {
                 return G.lifetime;
@@ -193,7 +195,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("MAGNET", 50, 200, 220, 20,
             displayValue = function() {
                 return G.magnet.factor;
@@ -206,7 +208,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("TIMEWARP", 50, 225, 220, 20,
             displayValue = function() {
                 return G.timewarp;
@@ -219,7 +221,7 @@ function initGUI() {
             }
         )
     );
-    G.buttons.push(
+    GUI.buttons.push(
         new UpgradeButton("TIMEWARP FACTOR", 50, 250, 220, 20,
             displayValue = function() {
                 return G.timewarpFactor;
@@ -269,8 +271,8 @@ function drawMenu() {
     ctx.strokeStyle = 'white';
     ctx.fillRect(0, 0, G.world.width, G.world.height);
 
-    for(i=G.buttons.length-1; i>=0; i--) {
-        var button = G.buttons[i];
+    for(i=GUI.buttons.length-1; i>=0; i--) {
+        var button = GUI.buttons[i];
         button.draw();
         if(isInside(G.mouse.x, G.mouse.y, button)) {
             button.hover(G.mouse.x, G.mouse.y);
@@ -489,8 +491,8 @@ function mouseClicked(evt) {
 function clickInMenu(evt) {
     x = evt.clientX - canvas.offsetLeft;
     y = evt.clientY - canvas.offsetTop;
-    for(i=G.buttons.length-1; i>=0; i--) {
-        var button = G.buttons[i];
+    for(i=GUI.buttons.length-1; i>=0; i--) {
+        var button = GUI.buttons[i];
         if(isInside(x, y, button)) {
             button.click();
         }
