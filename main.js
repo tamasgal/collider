@@ -68,13 +68,13 @@ window.onload = function() {
     document.addEventListener("keyup", keyUp);
     canvas.addEventListener("click", mouseClicked);
 
-    restoreState();
+    // restoreState();
 
     initialise();
 
     var fps = 60.;
     setInterval(update, 1000/fps);
-    setInterval(saveState, 2000);
+    // setInterval(saveState, 2000);
 
 }
 
