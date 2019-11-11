@@ -67,7 +67,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         }
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = C.button_text;
-        ctx.font = "bold 15px Courier";
+        ctx.font = "bold 13px Courier";
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         var suffix = '';
@@ -78,9 +78,10 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
                 suffix = "+" + G.upgradeFactor;
             }
         }
-        ctx.fillText(this.text + suffix, this.x + 5, this.y + Math.round(this.height / 2));
+        ctx.fillText(this.getLevel(), this.x + 5, this.y + Math.round(this.height / 2) + 2);
+        ctx.fillText(this.text + suffix, this.x + 40, this.y + Math.round(this.height / 2) + 2);
         ctx.textAlign = 'right';
-        ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2));
+        ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2) + 2);
     }
 
     this.click = function() {
