@@ -161,7 +161,7 @@ function initGUI() {
                 return G.multiplier.toPrecision(2);
             },
             upgrade = function() {
-                G.multiplier *= .1;
+                G.multiplier *= 1.1;
             },
             upgradeCost = function(level) {
                 return Math.pow(2, level);
