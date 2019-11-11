@@ -87,7 +87,7 @@ function initGUI() {
                 G.multiplier += .1;
             },
             upgradeCost = function(level) {
-                return Math.pow(level, 2);
+                return Math.pow(2, level);
             }
         )
     );
@@ -100,7 +100,7 @@ function initGUI() {
                 G.n_balls += 1;
             },
             upgradeCost = function(level) {
-                return Math.pow(level, 4);
+                return Math.pow(4, level);
             }
         )
     );
@@ -113,7 +113,7 @@ function initGUI() {
                 G.targetSize += 1;
             },
             upgradeCost = function(level) {
-                return Math.pow(level, 3);
+                return Math.pow(3, level);
             }
         )
     );
@@ -126,7 +126,7 @@ function initGUI() {
                 G.lifetime += 10;
             },
             upgradeCost = function(level) {
-                return Math.pow(level, 3);
+                return Math.pow(3, level);
             }
         )
     );
@@ -139,7 +139,7 @@ function initGUI() {
                 G.magnet.factor += 1;
             },
             upgradeCost = function(level) {
-                return Math.pow(level + 1, 10);
+                return Math.pow(10, level + 1);
             }
         )
     );
