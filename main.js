@@ -153,7 +153,6 @@ function reset() {
 
 function initGUI() {
     GUI.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
-    GUI.buttons.push(new Button("RESET", G.world.width-50-100, 250, 100, 20, reset));
     GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 275, 100, 20, restoreState));
     GUI.buttons.push(new Button("SAVE", G.world.width-50-100, 300, 100, 20, saveState));
     GUI.buttons.push(
