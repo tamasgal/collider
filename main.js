@@ -320,8 +320,6 @@ function processCollisions() {
                 new_target = new Target(
                     ball.x,
                     ball.y,
-                    G.targetSize,
-                    G.lifetime,
                     chain
                 );
                 G.targets.push(new_target);
@@ -406,7 +404,7 @@ function clickInGame(evt) {
         G.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        target = new Target(x, y, G.targetSize, G.lifetime);
+        target = new Target(x, y);
         G.targets.push(target);
         G.magnet.x = x;
         G.magnet.y = y;

@@ -42,23 +42,24 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
 }
 
 
-var Target = function(x, y, r, lifetime, chain=1) {
+var Target = function(x, y, chain=1) {
     this.x = x;
     this.y = y;
-    this.r = r;
-    this.lifetime = lifetime;
-    this.original_lifetime = lifetime;
+    this.lifetime = G.lifetime;
     this.chain = chain;
+    this.r = G.targetSize;
 
     this.tick = function() {
         this.lifetime -= 1;
-        if(this.lifetime - this.original_lifetime > -10) {
+        if(this.lifetime - G.lifetime > -10) {
             this.r += Math.cos(this.lifetime) * 2;
+        } else {
+            this.r = G.targetSize;
         }
     }
 
     this.draw = function() {
-        var a = this.lifetime / this.original_lifetime;
+        var a = this.lifetime / G.lifetime;
         var r = this.chain / G.n_balls;
         var g = 0;
         var b = 1 - r;
