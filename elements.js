@@ -18,15 +18,24 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
         if (this.y + this.dy > G.world.height - this.r || this.y + this.dy < this.r) {
             this.dy = -this.dy;
         }
+
+        var dx = this.dx;
+        var dy = this.dy;
+
+        if(G.isTimewarping) {
+            dx = this.dx / G.timewarpFactor;
+            dy = this.dy / G.timewarpFactor;
+        }
+
         if(G.magnet.factor > 0 && G.targets.length > 0) {
             dist = distance(G.magnet, this);
             mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 1000;
             mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 1000;
-            this.dx += mdx;
-            this.dy += mdy;
+            dx += mdx;
+            dy += mdy;
         }
-        x = this.x + this.dx;
-        y = this.y + this.dy;
+        x = this.x + dx;
+        y = this.y + dy;
         this.x = x;
         this.y = y;
     }
@@ -50,22 +59,27 @@ var Target = function(x, y, chain=1) {
     this.r = G.targetSize;
 
     this.tick = function() {
-        this.lifetime -= 1;
-        if(this.lifetime - G.lifetime > -10) {
-            this.r += Math.cos(this.lifetime) * 2;
+        if(G.isTimewarping) {
+            this.lifetime -= (1 / G.timewarpFactor);
         } else {
-            this.r = G.targetSize;
+            this.lifetime -= 1;
         }
     }
 
     this.draw = function() {
+        var radius = this.r
+        if(this.lifetime - G.lifetime > -10) {
+            radius += (Math.cos(this.lifetime) * 2);
+        } else {
+            radius = G.targetSize;
+        }
         var a = this.lifetime / G.lifetime;
         var r = this.chain / G.n_balls;
         var g = 0;
         var b = 1 - r;
         ctx.beginPath();
         ctx.fillStyle = rgba(r, g, b, a);
-        ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
+        ctx.arc(this.x, this.y, radius, 0, 2*Math.PI);
         ctx.fill();
         ctx.font = "bold 15px Courier";
         ctx.textBaseline = 'middle';

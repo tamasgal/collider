@@ -31,6 +31,10 @@ var G = {
     "lifetime": 100,
     "targetSize": 20,
     "magnet": {"x": 0, "y": 0, "factor": 0},
+    "timewarp": 0,
+    "timewarpFactor": 1,
+    "timewarpFuel": 0,
+    "isTimewarping": false,
 
     "inMenu": true,
     "inGame": false,
@@ -41,12 +45,14 @@ var G = {
     "longestChain": 0,
     "longestChainInRound": 0,
 
-    "upgradeFactor": 1,
+    "upgradeFactor": 2,
 }
 
 var KEY = {
     "shift": 16,
     "ctrl": 17,
+    "alt": 18,
+    "space": 32,
 }
 
 var egg = [];
@@ -87,9 +93,9 @@ function initialise() {
 // }
 
 function initGUI() {
-    G.buttons.push(new Button("NEW ROUND", 50, 50, 200, 20, clickNewRound));
+    G.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
     G.buttons.push(
-        new UpgradeButton("MULTIPLIER", 50, 100, 200, 20,
+        new UpgradeButton("MULTIPLIER", 50, 100, 220, 20,
             displayValue = function() {
                 return G.multiplier.toPrecision(2);
             },
@@ -102,7 +108,7 @@ function initGUI() {
         )
     );
     G.buttons.push(
-        new UpgradeButton("BALLS", 50, 125, 200, 20,
+        new UpgradeButton("BALLS", 50, 125, 220, 20,
             displayValue = function() {
                 return G.n_balls;
             },
@@ -115,7 +121,7 @@ function initGUI() {
         )
     );
     G.buttons.push(
-        new UpgradeButton("TARGET SIZE", 50, 150, 200, 20,
+        new UpgradeButton("TARGET SIZE", 50, 150, 220, 20,
             displayValue = function() {
                 return G.targetSize;
             },
@@ -128,7 +134,7 @@ function initGUI() {
         )
     );
     G.buttons.push(
-        new UpgradeButton("LIFETIME", 50, 175, 200, 20,
+        new UpgradeButton("LIFETIME", 50, 175, 220, 20,
             displayValue = function() {
                 return G.lifetime;
             },
@@ -141,12 +147,38 @@ function initGUI() {
         )
     );
     G.buttons.push(
-        new UpgradeButton("MAGNET", 50, 200, 200, 20,
+        new UpgradeButton("MAGNET", 50, 200, 220, 20,
             displayValue = function() {
                 return G.magnet.factor;
             },
             upgrade = function() {
                 G.magnet.factor += 1;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(10, level + 1);
+            }
+        )
+    );
+    G.buttons.push(
+        new UpgradeButton("TIMEWARP", 50, 225, 220, 20,
+            displayValue = function() {
+                return G.timewarp;
+            },
+            upgrade = function() {
+                G.timewarp += 10;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(10, level + 1);
+            }
+        )
+    );
+    G.buttons.push(
+        new UpgradeButton("TIMEWARP FACTOR", 50, 250, 220, 20,
+            displayValue = function() {
+                return G.timewarpFactor;
+            },
+            upgrade = function() {
+                G.timewarpFactor += 1;
             },
             upgradeCost = function(level) {
                 return Math.pow(10, level + 1);
@@ -159,6 +191,7 @@ function startNewRound() {
     G.balls = [];
     G.targets = [];
     G.longestChainInRound = 0,
+    G.timewarpFuel = G.timewarp,
     createBalls();
 }
 
@@ -180,7 +213,6 @@ function drawCanvas() {
     ctx.lineWidth = '5';
     ctx.fillStyle = '#f2eded';
     ctx.strokeStyle = 'white';
-
     ctx.fillRect(0, 0, G.world.width, G.world.height);
 }
 
@@ -242,8 +274,10 @@ function update() {
 function updateGame() {
     tick();
     drawCanvas();
+    timewarp();
     drawBalls();
     drawTargets();
+    drawOverlay();
     processCollisions();
     updateMagnet();
     cleanUp();
@@ -251,6 +285,20 @@ function updateGame() {
         G.inGame = false;
         G.inMenu = true;
         G.targetSet = false;
+    }
+}
+
+function drawOverlay() {
+    if(G.timewarp > 0) {
+        ctx.fillStyle = "#000";
+        var width = 100;
+        var height = 5;
+        var timewarpProgress = G.timewarpFuel / G.timewarp;
+        ctx.strokeStyle = "#333";
+        ctx.lineWidth = 1;
+        ctx.fillStyle = 'rgba(200, 200, 200, 0.9)';
+        ctx.fillRect(G.world.width-10-100, G.world.height-15, width * timewarpProgress, height);
+        ctx.strokeRect(G.world.width-10-100, G.world.height-15, width, height);
     }
 }
 
@@ -454,15 +502,27 @@ function keyDown(evt) {
     if(k == KEY.ctrl) {
         G.upgradeFactor = "MAX";
     }
+    if(k == KEY.space) {
+        G.isTimewarping = true;
+    }
     egg.push(k);
     check3DEllipsoid();
+}
 
-
+function timewarp() {
+    if(G.isTimewarping && G.timewarpFuel >= 1) {
+        G.timewarpFuel -= 1;
+    } else {
+        G.isTimewarping = false;
+    }
 }
 
 function keyUp(evt) {
     var k = evt.keyCode;
     if(k == KEY.shift || k == KEY.ctrl) {
         G.upgradeFactor = 1;
+    }
+    if(k == KEY.space) {
+        G.isTimewarping = false;
     }
 }
