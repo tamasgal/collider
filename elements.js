@@ -20,8 +20,8 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
         }
         if(G.magnet.factor > 0 && S.targets.length > 0) {
             dist = distance(G.magnet, this);
-            mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 1000;
-            mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 1000;
+            mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 100;
+            mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 100;
             this.dx += mdx;
             this.dy += mdy;
         }
@@ -31,7 +31,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
             dx /= G.timewarpFactor;
             dy /= G.timewarpFactor;
         }
-        
+
         x = this.x + dx;
         y = this.y + dy;
         this.x = x;
