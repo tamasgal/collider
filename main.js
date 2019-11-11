@@ -76,8 +76,6 @@ window.onload = function() {
 
     var fps = 60.;
     setInterval(update, 1000/fps);
-    setInterval(saveState, 2000);
-
 }
 
 function restoreState() {
@@ -497,6 +495,7 @@ function clickInMenu(evt) {
             button.click();
         }
     }
+    saveState();
 }
 
 function clickNewRound() {
