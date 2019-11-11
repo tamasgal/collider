@@ -41,8 +41,6 @@ var DEFAULT_G = {
     "longestChainInRound": 0,
 
     "upgradeFactor": 1,
-
-    "upgrades": {},
 }
 
 var S = {
