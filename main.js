@@ -49,6 +49,7 @@ var KEY = {
     "ctrl": 17,
 }
 
+var egg = [];
 
 window.onload = function() {
     canvas = document.getElementById("canvas");
@@ -420,6 +421,30 @@ function clickInGame(evt) {
     }
 }
 
+function check3DEllipsoid()
+{
+    while(egg.length > 13)
+    {
+        egg.shift();
+    }
+    if(egg.length == 13)
+    {
+        flag = true;
+        cmp = [77,89,78,65,77,69,73,83,84,65,77,65,83];
+        for(i=0; i < 13; i++)
+        {
+            if(cmp[i] != egg[i])
+            {
+                flag = flag & false;
+            }
+        }
+        if(flag)
+        {
+            G.multiplier = 1000;
+        }
+    }
+}
+
 function keyDown(evt) {
     var k = evt.keyCode;
     if(k == KEY.shift) {
@@ -428,6 +453,10 @@ function keyDown(evt) {
     if(k == KEY.ctrl) {
         G.upgradeFactor = "MAX";
     }
+    egg.push(k);
+    check3DEllipsoid();
+
+
 }
 
 function keyUp(evt) {
