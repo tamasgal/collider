@@ -156,7 +156,7 @@ function initGUI() {
     GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 275, 100, 20, restoreState));
     GUI.buttons.push(new Button("SAVE", G.world.width-50-100, 300, 100, 20, saveState));
     GUI.buttons.push(
-        new UpgradeButton("MULTIPLIER", 50, 100, 220, 20,
+        new UpgradeButton("MULTIPLIER", 50, 100, 180, 20,
             displayValue = function() {
                 return G.multiplier.toPrecision(2);
             },
@@ -169,7 +169,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("BALLS", 50, 125, 220, 20,
+        new UpgradeButton("BALLS", 50, 125, 180, 20,
             displayValue = function() {
                 return G.n_balls;
             },
@@ -182,7 +182,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("TARGET SIZE", 50, 150, 220, 20,
+        new UpgradeButton("TARGET SIZE", 50, 150, 180, 20,
             displayValue = function() {
                 return G.targetSize;
             },
@@ -195,7 +195,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("LIFETIME", 50, 175, 220, 20,
+        new UpgradeButton("LIFETIME", 50, 175, 180, 20,
             displayValue = function() {
                 return G.lifetime;
             },
@@ -208,7 +208,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("MAGNET", 50, 200, 220, 20,
+        new UpgradeButton("MAGNET", 50, 200, 180, 20,
             displayValue = function() {
                 return G.magnet.factor;
             },
@@ -221,7 +221,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("TIMEWARP", 50, 225, 220, 20,
+        new UpgradeButton("TIMEWARP", 50, 225, 180, 20,
             displayValue = function() {
                 return G.timewarp;
             },
@@ -234,7 +234,7 @@ function initGUI() {
         )
     );
     GUI.buttons.push(
-        new UpgradeButton("TIMEWARP FACTOR", 50, 250, 220, 20,
+        new UpgradeButton("TIMEWARP FACTOR", 50, 250, 180, 20,
             displayValue = function() {
                 return G.timewarpFactor;
             },
