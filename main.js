@@ -99,6 +99,7 @@ function restoreState() {
 function saveState() {
     console.log("Saving game state...");
     setCookie("G", JSON.stringify(G), 365);
+    console.log(JSON.stringify(G));
 }
 
 function setCookie(name, value, days) {
