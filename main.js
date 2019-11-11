@@ -62,7 +62,18 @@ function initialise() {
     window.addEventListener('resize', resizeCanvas, false);
     resizeCanvas();
     initGUI();
+    // initMusic();
 }
+
+// function initMusic() {
+//     music = new Audio('music/Havevo.wav');
+//     music.addEventListener('ended', function() {
+//         this.currentTime = 0;
+//         this.play();
+//     }, false);
+//     music.volume = 0.5;
+//     music.play();
+// }
 
 function initGUI() {
     G.buttons.push(new Button("NEW ROUND", 50, 50, 200, 20, clickNewRound));
