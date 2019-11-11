@@ -44,6 +44,9 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.upgradeProgress = 0.0;
 
     this.getLevel = function() {
+        if(G.upgrades[this.text] === undefined) {
+            G.upgrades[this.text] = 1;
+        }
         return G.upgrades[this.text];
     }
 
