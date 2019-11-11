@@ -58,17 +58,31 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.font = "bold 15px Courier";
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(this.text, this.x + 5, this.y + Math.round(this.height / 2));
+        var suffix = '';
+        if(G.upgradeFactor != 1) {
+            if(G.upgradeFactor == "MAX") {
+                suffix = "+" + this.highestPossibleUpgrade();
+            } else {
+                suffix = "+" + G.upgradeFactor;
+            }
+        }
+        ctx.fillText(this.text + suffix, this.x + 5, this.y + Math.round(this.height / 2));
         ctx.textAlign = 'right';
         ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2));
     }
 
     this.click = function() {
-        var cost = this.nextUpgrade();
-        if(G.points >= cost) {
-            addPoints(-cost);
-            this.level += 1;
-            this.upgrade();
+        var factor = G.upgradeFactor;
+        if(factor == "MAX") {
+            factor = this.highestPossibleUpgrade();
+        }
+        for(var i=0; i<factor; i++) {
+            var cost = this.nextUpgrade();
+            if(G.points >= cost) {
+                addPoints(-cost);
+                this.level += 1;
+                this.upgrade();
+            }
         }
     }
     this.hover = function(x, y) {
@@ -76,15 +90,53 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.font = "bold 10px Courier";
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(C.currency + ' ' + this.nextUpgrade() + " (LVL " + (this.level + 1) + ")", x+10, y);
+        var suffix = '';
+        if(G.upgradeFactor != 1) {
+            suffix = "+" + G.upgradeFactor;
+        }
+        ctx.fillText(
+            C.currency + ' ' +
+            this.nextUpgrade() +
+            " (LVL " + (this.level + 1) + ") " + suffix,
+            x+10, y
+        );
     }
 
     this.nextUpgrade = function() {
-        return this.upgradeCost(this.level + 1);
+        var factor = G.upgradeFactor;
+        if(G.upgradeFactor == "MAX") {
+            factor = this.highestPossibleUpgrade();
+            if(factor == 0) {
+                factor = 1;
+            }
+        }
+        if(factor == 1) {
+            return this.upgradeCost(this.level + 1);
+        } else {
+            var total = 0;
+            for(var i=1; i<=factor; i++) {
+                total += this.upgradeCost(this.level + i);
+            }
+            return total;
+        }
+    }
+
+    this.highestPossibleUpgrade = function() {
+        var factor = 0;
+        var points = G.points;
+        for(var i=1; true; i++) {
+            points -= this.upgradeCost(this.level + i); 
+            if(points >= 0) {
+                factor += 1;
+            } else {
+                break;
+            }
+        }
+        return factor;
     }
 
     this.adjustUpgradeProgress = function() {
-        var cost = this.upgradeCost(this.level + 1);
+        var cost = this.nextUpgrade();
         var progress = G.points / cost;
         if(G.points >= cost) {
             progress = 1.0;

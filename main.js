@@ -40,6 +40,13 @@ var G = {
 
     "longestChain": 0,
     "longestChainInRound": 0,
+
+    "upgradeFactor": 1,
+}
+
+var KEY = {
+    "shift": 16,
+    "ctrl": 17,
 }
 
 
@@ -50,6 +57,8 @@ window.onload = function() {
     canvas.addEventListener("mousedown", startDrag);
     canvas.addEventListener("mousemove", mouseMoved);
     canvas.addEventListener("mouseup", stopDrag);
+    document.addEventListener("keydown", keyDown);
+    document.addEventListener("keyup", keyUp);
     canvas.addEventListener("click", mouseClicked);
 
     initialise();
@@ -408,5 +417,22 @@ function clickInGame(evt) {
         G.targets.push(target);
         G.magnet.x = x;
         G.magnet.y = y;
+    }
+}
+
+function keyDown(evt) {
+    var k = evt.keyCode;
+    if(k == KEY.shift) {
+        G.upgradeFactor = 10;
+    }
+    if(k == KEY.ctrl) {
+        G.upgradeFactor = "MAX";
+    }
+}
+
+function keyUp(evt) {
+    var k = evt.keyCode;
+    if(k == KEY.shift || k == KEY.ctrl) {
+        G.upgradeFactor = 1;
     }
 }
