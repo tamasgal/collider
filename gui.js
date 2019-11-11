@@ -42,10 +42,12 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.displayValue = displayValue;
     this.level = 0;
     this.upgradeCost = upgradeCost;
+    this.upgradeProgress = 0.0;
 
     this.draw = function() {
         ctx.fillStyle = '#fff';
-        ctx.fillRect(this.x, this.y + this.height, this.upgradeProgress() * this.width, 2);
+        this.adjustUpgradeProgress();
+        ctx.fillRect(this.x, this.y + this.height, this.upgradeProgress * this.width, 2);
         if(G.points >= this.nextUpgrade()) {
             ctx.fillStyle = C.upgrade_button_active;
         } else {
@@ -81,11 +83,12 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         return this.upgradeCost(this.level + 1);
     }
 
-    this.upgradeProgress = function() {
-        var total = this.upgradeCost(this.level + 1) - this.upgradeCost(this.level);
-        if(G.points >= total) {
-            return 1.0;
+    this.adjustUpgradeProgress = function() {
+        var cost = this.upgradeCost(this.level + 1);
+        var progress = G.points / cost;
+        if(G.points >= cost) {
+            progress = 1.0;
         }
-        return G.points / total;
+        this.upgradeProgress += (progress - this.upgradeProgress) / 2;
     }
 }
