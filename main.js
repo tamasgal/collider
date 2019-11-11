@@ -157,6 +157,7 @@ function initGUI() {
 
 function startNewRound() {
     G.balls = [];
+    G.targets = [];
     G.longestChainInRound = 0,
     createBalls();
 }
@@ -281,7 +282,7 @@ function updateStats() {
 }
 
 function checkIfRoundHasEnded() {
-    if(G.targetSet && G.targets.length == 0) {
+    if(G.targetSet && (G.targets.length == 0 || G.balls.length == 0)) {
         return true;
     }
     return false;
