@@ -17,7 +17,7 @@ var C = {
     "currency": "\u{1F789}",
 }
 
-var G = {
+var DEFAULT_G = {
     "n_balls": 16,
     "world": {"width": 600, "height": 400},
     "balls": [],
@@ -45,6 +45,8 @@ var G = {
 
     "upgradeFactor": 1,
 }
+
+var G;
 
 var GUI = {
     "buttons": [],
@@ -83,6 +85,8 @@ function restoreState() {
     if(cookie_index != -1) {
         console.log("Restoring game state...");
         G = JSON.parse(getCookie('G'));
+    } else {
+        G = DEFAULT_G;
     }
 }
 
@@ -120,7 +124,9 @@ function getCookie(c_name) {
     return "";
 }
 
-
+function eraseCookie(name) {   
+    document.cookie = name+'=; Max-Age=-99999999;';  
+}
 
 function initialise() {
     window.addEventListener('resize', resizeCanvas, false);
@@ -139,8 +145,14 @@ function initialise() {
 //     music.play();
 // }
 
+function reset() {
+    G = DEFAULT_G;
+    eraseCookie("G");
+}
+
 function initGUI() {
     GUI.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
+    GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 50, 100, 20, reset));
     GUI.buttons.push(
         new UpgradeButton("MULTIPLIER", 50, 100, 220, 20,
             displayValue = function() {
