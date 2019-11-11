@@ -18,22 +18,20 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
         if (this.y + this.dy > G.world.height - this.r || this.y + this.dy < this.r) {
             this.dy = -this.dy;
         }
-
-        var dx = this.dx;
-        var dy = this.dy;
-
-        if(G.isTimewarping) {
-            dx = this.dx / G.timewarpFactor;
-            dy = this.dy / G.timewarpFactor;
-        }
-
         if(G.magnet.factor > 0 && S.targets.length > 0) {
             dist = distance(G.magnet, this);
             mdx = (G.magnet.x - this.x) / dist * G.magnet.factor / 1000;
             mdy = (G.magnet.y - this.y) / dist * G.magnet.factor / 1000;
-            dx += mdx;
-            dy += mdy;
+            this.dx += mdx;
+            this.dy += mdy;
         }
+        dx = this.dx;
+        dy = this.dy;
+        if(G.isTimewarping) {
+            dx /= G.timewarpFactor;
+            dy /= G.timewarpFactor;
+        }
+        
         x = this.x + dx;
         y = this.y + dy;
         this.x = x;
