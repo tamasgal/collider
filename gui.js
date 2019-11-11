@@ -94,7 +94,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
             factor = this.highestPossibleUpgrade();
         }
         for(var i=0; i<factor; i++) {
-            var cost = this.nextUpgrade();
+            var cost = this.upgradeCost(this.getLevel() + 1);
             if(G.points >= cost) {
                 addPoints(-cost);
                 this.increaseLevel(1);
