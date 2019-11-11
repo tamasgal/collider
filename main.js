@@ -17,7 +17,7 @@ var C = {
     "currency": "\u{1F789}",
 }
 
-var DEFAULT_G = {
+var G = {
     "n_balls": 16,
     "world": {"width": 600, "height": 400},
     "mouse": {"x": 0, "y": 0},
@@ -50,8 +50,6 @@ var S = {
     "targets": [],
 }
 
-var G;
-
 var GUI = {
     "buttons": [],
 }
@@ -78,8 +76,6 @@ window.onload = function() {
 
     initialise();
 
-    G = DEFAULT_G;
-
     var fps = 60.;
     setInterval(update, 1000/fps);
     // setInterval(saveState, 1000);
@@ -91,8 +87,6 @@ function restoreState() {
         console.log("Restoring game state...");
         G = JSON.parse(getCookie('G'));
         console.log(G);
-    } else {
-        G = DEFAULT_G;
     }
 }
 
