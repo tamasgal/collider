@@ -9,7 +9,7 @@ var canvas;
 var ctx;
 
 var C = {
-    "button": "steelblue",
+    "button": rgba(0, 0.5, 0.7, 1.0, offset=150),
     "button_clicked": "red",
     "button_text": "#333",
     "upgrade_button_active": rgba(0, 0.8, 0, 1.0, offset=150),
