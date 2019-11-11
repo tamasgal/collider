@@ -40,9 +40,21 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.height = height;
     this.upgrade = upgrade;
     this.displayValue = displayValue;
-    this.level = 0;
     this.upgradeCost = upgradeCost;
     this.upgradeProgress = 0.0;
+
+    this.getLevel = function() {
+        return G.upgrades[this.text];
+    }
+
+    this.setLevel = function(level) {
+        G.upgrades[this.text] = level;
+    }
+    this.setLevel(0);
+
+    this.increaseLevel = function(level) {
+        this.setLevel(this.getLevel() + level);
+    }
 
     this.draw = function() {
         ctx.fillStyle = '#fff';
@@ -80,7 +92,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
             var cost = this.nextUpgrade();
             if(G.points >= cost) {
                 addPoints(-cost);
-                this.level += 1;
+                this.increaseLevel(1);
                 this.upgrade();
             }
         }
@@ -97,7 +109,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.fillText(
             C.currency + ' ' +
             this.nextUpgrade() +
-            " (LVL " + (this.level + 1) + ") " + suffix,
+            " (LVL " + (this.getLevel() + 1) + ") " + suffix,
             x+10, y
         );
     }
@@ -111,11 +123,11 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
             }
         }
         if(factor == 1) {
-            return this.upgradeCost(this.level + 1);
+            return this.upgradeCost(this.getLevel() + 1);
         } else {
             var total = 0;
             for(var i=1; i<=factor; i++) {
-                total += this.upgradeCost(this.level + i);
+                total += this.upgradeCost(this.getLevel() + i);
             }
             return total;
         }
@@ -125,7 +137,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         var factor = 0;
         var points = G.points;
         for(var i=1; true; i++) {
-            points -= this.upgradeCost(this.level + i); 
+            points -= this.upgradeCost(this.getLevel() + i); 
             if(points >= 0) {
                 factor += 1;
             } else {
