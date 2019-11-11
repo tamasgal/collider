@@ -68,10 +68,33 @@ window.onload = function() {
     document.addEventListener("keyup", keyUp);
     canvas.addEventListener("click", mouseClicked);
 
+    restoreState();
+
     initialise();
 
     var fps = 60.;
     setInterval(update, 1000/fps);
+    setInterval(saveState, 2000);
+
+}
+
+function restoreState() {
+    var cookie_index = document.cookie.indexOf("G=");
+    if(cookie_index != -1) {
+        console.log("Restoring game state...");
+        G = JSON.parse(getCookie('G'));
+    }
+}
+
+function saveState() {
+    console.log("Saving game state...");
+    setCookie("G", JSON.stringify(G), 365);
+}
+
+function setCookie(cookiename, cookievalue, days) {
+    var date = new Date();
+    date.setTime(date.getTime() + Number(days) * 36 * 3600 * 1000);
+    document.cookie = cookiename + "=" + cookievalue + "; path=/;expires = " + date.toGMTString();
 
 }
 
