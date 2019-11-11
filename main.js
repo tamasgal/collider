@@ -78,6 +78,7 @@ window.onload = function() {
 
     var fps = 60.;
     setInterval(update, 1000/fps);
+    setInterval(saveState, 1000/fps);
 }
 
 function restoreState() {
@@ -344,7 +345,6 @@ function updateGame() {
         G.inGame = false;
         G.inMenu = true;
         G.targetSet = false;
-        saveState();
     }
 }
 
@@ -508,7 +508,6 @@ function clickInMenu(evt) {
             button.click();
         }
     }
-    saveState();
 }
 
 function clickNewRound() {
