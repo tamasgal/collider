@@ -76,15 +76,16 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         var suffix = '';
         if(G.upgradeFactor != 1) {
             if(G.upgradeFactor == "MAX") {
-                suffix = "+" + this.highestPossibleUpgrade();
+                suffix = " + " + this.highestPossibleUpgrade();
             } else {
-                suffix = "+" + G.upgradeFactor;
+                suffix = " + " + G.upgradeFactor;
             }
         }
-        ctx.fillText(this.getLevel(), this.x + 5, this.y + Math.round(this.height / 2) + 2);
-        ctx.fillText(this.text + suffix, this.x + 40, this.y + Math.round(this.height / 2) + 2);
+        ctx.fillText(this.text, this.x + 5, this.y + Math.round(this.height / 2) + 2);
         ctx.textAlign = 'right';
         ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2) + 2);
+        ctx.textAlign = 'left';
+        ctx.fillText("LVL " + this.getLevel() + suffix, this.x + this.width + 5, this.y + Math.round(this.height / 2) + 2);
     }
 
     this.click = function() {
@@ -106,16 +107,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.font = "bold 10px Courier";
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        var suffix = '';
-        if(G.upgradeFactor != 1) {
-            suffix = "+" + G.upgradeFactor;
-        }
-        ctx.fillText(
-            C.currency + ' ' +
-            this.nextUpgrade() +
-            " (LVL " + (this.getLevel() + 1) + ") " + suffix,
-            x+10, y
-        );
+        ctx.fillText(C.currency + ' ' + this.nextUpgrade(), x+10, y);
     }
 
     this.nextUpgrade = function() {
