@@ -32,7 +32,7 @@ var G = {
     "targetSize": 20,
     "magnet": {"x": 0, "y": 0, "factor": 0},
     "timewarp": 0,
-    "timewarpFactor": 1,
+    "timewarpFactor": 2,
     "timewarpFuel": 0,
     "isTimewarping": false,
 
@@ -45,7 +45,7 @@ var G = {
     "longestChain": 0,
     "longestChainInRound": 0,
 
-    "upgradeFactor": 2,
+    "upgradeFactor": 1,
 }
 
 var KEY = {
