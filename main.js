@@ -125,8 +125,8 @@ function getCookie(c_name) {
     return "";
 }
 
-function eraseCookie(name) {   
-    document.cookie = name+'=; Max-Age=-99999999;';  
+function eraseCookie(name) {
+    document.cookie = name+'=; Max-Age=-99999999;';
 }
 
 function initialise() {
@@ -161,7 +161,7 @@ function initGUI() {
                 return G.multiplier.toPrecision(2);
             },
             upgrade = function() {
-                G.multiplier += .1;
+                G.multiplier *= .1;
             },
             upgradeCost = function(level) {
                 return Math.pow(2, level);
