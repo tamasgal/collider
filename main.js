@@ -82,7 +82,7 @@ window.onload = function() {
 
     var fps = 60.;
     setInterval(update, 1000/fps);
-    setInterval(saveState, 1000);
+    // setInterval(saveState, 1000);
 }
 
 function restoreState() {
