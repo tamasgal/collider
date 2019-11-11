@@ -74,7 +74,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.font = "bold 10px Courier";
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText(this.nextUpgrade() + " (LVL " + (this.level + 1) + ")", x+10, y);
+        ctx.fillText(C.currency + ' ' + this.nextUpgrade() + " (LVL " + (this.level + 1) + ")", x+10, y);
     }
 
     this.nextUpgrade = function() {

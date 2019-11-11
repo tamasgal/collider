@@ -11,9 +11,10 @@ var ctx;
 var C = {
     "button": "steelblue",
     "button_clicked": "red",
-    "button_text": "white",
-    "upgrade_button_active": rgba(0, 0.8, 0, 1.0),
-    "upgrade_button_inactive": rgba(0.8, 0, 0, 1.0),
+    "button_text": "#333",
+    "upgrade_button_active": rgba(0, 0.8, 0, 1.0, offset=150),
+    "upgrade_button_inactive": rgba(0.8, 0, 0, 1.0, offset=150),
+    "currency": "\u{1F789}",
 }
 
 var G = {
@@ -174,11 +175,9 @@ function drawCanvas() {
 
 function drawMenu() {
     ctx.lineWidth = '5';
-    ctx.fillStyle = 'rgba(100, 100, 150, 1.0)';
+    ctx.fillStyle = rgba(0.1, 0.05, 0, 1.0, offset=180);
     ctx.strokeStyle = 'white';
-    ctx.globalAlpha = 0.5;
     ctx.fillRect(0, 0, G.world.width, G.world.height);
-    ctx.globalAlpha = 1.0;
 
     for(i=G.buttons.length-1; i>=0; i--) {
         var button = G.buttons[i];
@@ -195,7 +194,7 @@ function drawStats() {
     ctx.strokeStyle = 'white';
 
     var x0 = 0;
-    var y0 = G.world.height;
+    var y0 = G.world.height - 30;
 
     if(G.points != G.points_) {
         if(Math.abs(G.points - G.points_) < 10) {
@@ -204,13 +203,14 @@ function drawStats() {
             G.points_ += Math.round((G.points - G.points_) / 2);
         }
     }
-    ctx.fillRect(x0, y0, G.world.width, 100);
-    ctx.font = "bold 30px Courier";
-    ctx.fillStyle = "#fff";
-    ctx.textBaseline = 'bottom';
+    // ctx.fillRect(x0, y0, G.world.width, 1);
+    ctx.font = "bold 12px Courier";
+    ctx.textBaseline = 'top';
     ctx.textAlign = 'left';
-    ctx.fillText("POINTS " + Math.round(G.points_), x0 + 20, y0 + 40);
-    ctx.fillText("LONGEST CHAIN " + G.longestChain, x0 + 20, y0 + 70);
+    ctx.fillStyle = "#222";
+    ctx.fillText(C.currency + ' '+ Math.round(G.points_), x0 + 10, y0);
+    ctx.fillStyle = "#555";
+    ctx.fillText("LONGEST CHAIN " + G.longestChain, x0 + 10, y0 + 12);
 }
 
 function resizeCanvas() {
