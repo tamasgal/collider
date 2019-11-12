@@ -1,9 +1,10 @@
-// Groooo!
+// Collider
 //
-// A simple "eating stuff" game.
+// A simple "colliding" game.
 //
-// Author: Tamás Gál - https://github.com/tamasgal/groooo
-//
+// Authors: Tamás Gál - https://github.com/tamasgal/collider
+//          Jonas Reubelt
+//          Johannes Schumann
 
 var canvas;
 var ctx;
