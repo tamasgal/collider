@@ -52,6 +52,34 @@ var G = {
     "upgrades": {},
 }
 
+// cost scaling
+var CS = {
+    "multiplier": 3,
+    "nBalls": 5,
+    "targetSize": 5,
+    "lifetime": 5,
+    "magnet": 100,
+    "timewarp": 10,
+    "timewarpFactor": 10,
+    "repulsion": 5,
+    "viscosity": 100,
+
+}
+
+//upgrade scaling
+var US = {
+    "multiplier": 1.1,
+    "nBalls": 1,
+    "targetSize": 1,
+    "lifetime": 10,
+    "magnet": 1,
+    "timewarp": 10,
+    "timewarpFactor": 1,
+    "repulsion": .01,
+    "viscosity": .001,
+
+}
+
 var S = {
     "balls": [],
     "targets": [],
@@ -168,10 +196,10 @@ function initGUI() {
                 return G.multiplier.toPrecision(3);
             },
             upgrade = function() {
-                G.multiplier *= 1.1;
+                G.multiplier *= US.multiplier;
             },
             upgradeCost = function(level) {
-                return Math.pow(2, level);
+                return Math.pow(CS.multiplier, level);
             }
         )
     );
@@ -181,10 +209,10 @@ function initGUI() {
                 return G.nBalls;
             },
             upgrade = function() {
-                G.nBalls += 1;
+                G.nBalls += US.nBalls;
             },
             upgradeCost = function(level) {
-                return Math.pow(4, level);
+                return Math.pow(CS.nBalls, level);
             }
         )
     );
@@ -194,10 +222,10 @@ function initGUI() {
                 return G.targetSize;
             },
             upgrade = function() {
-                G.targetSize += 1;
+                G.targetSize += US.targetSize;
             },
             upgradeCost = function(level) {
-                return Math.pow(3, level);
+                return Math.pow(CS.targetSize, level);
             }
         )
     );
@@ -207,10 +235,10 @@ function initGUI() {
                 return G.lifetime;
             },
             upgrade = function() {
-                G.lifetime += 10;
+                G.lifetime += US.lifetime;
             },
             upgradeCost = function(level) {
-                return Math.pow(3, level);
+                return Math.pow(CS.lifetime, level);
             }
         )
     );
@@ -220,10 +248,10 @@ function initGUI() {
                 return G.magnet.factor;
             },
             upgrade = function() {
-                G.magnet.factor += 1;
+                G.magnet.factor += US.magnet;
             },
             upgradeCost = function(level) {
-                return Math.pow(10, level + 1);
+                return Math.pow(CS.magnet, level);
             }
         )
     );
@@ -233,10 +261,10 @@ function initGUI() {
                 return G.timewarp;
             },
             upgrade = function() {
-                G.timewarp += 10;
+                G.timewarp += US.timewarp;
             },
             upgradeCost = function(level) {
-                return Math.pow(10, level + 1);
+                return Math.pow(CS.timewarp, level);
             }
         )
     );
@@ -246,36 +274,36 @@ function initGUI() {
                 return G.timewarpFactor;
             },
             upgrade = function() {
-                G.timewarpFactor += 1;
+                G.timewarpFactor += US.timewarpFactor;
             },
             upgradeCost = function(level) {
-                return Math.pow(10, level + 1);
+                return Math.pow(CS.timewarpFactor, level);
             }
         )
     );
     GUI.buttons.push(
         new UpgradeButton("REPULSION", 50, 275, 180, 20,
             displayValue = function() {
-                return G.repulsionProb.toPrecision(3);
+                return G.repulsionProb.toPrecision(2);
             },
             upgrade = function() {
-                G.repulsionProb += .01;
+                G.repulsionProb += US.repulsion;
             },
             upgradeCost = function(level) {
-                return Math.pow(3, level);
+                return Math.pow(CS.repulsion, level);
             }
         )
     );
     GUI.buttons.push(
         new UpgradeButton("VISCOSITY", 50, 300, 180, 20,
             displayValue = function() {
-                return G.viscosity.toPrecision(3);
+                return G.viscosity.toPrecision(2);
             },
             upgrade = function() {
-                G.viscosity += .001;
+                G.viscosity += US.viscosity;
             },
             upgradeCost = function(level) {
-                return Math.pow(3, level);
+                return Math.pow(CS.viscosity, level);
             }
         )
     );
