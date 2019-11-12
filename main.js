@@ -15,7 +15,7 @@ var C = {
     "button_text": "#333",
     "upgrade_button_active": rgba(0, 0.8, 0, 1.0, offset=150),
     "upgrade_button_inactive": rgba(0.8, 0, 0, 1.0, offset=150),
-    "currency": "\u{1F789}",
+    "currency": "\u{25CF}",
 }
 
 var G = {
@@ -83,6 +83,7 @@ var US = {
 var S = {
     "balls": [],
     "targets": [],
+    "scores": [],
 }
 
 var GUI = {
@@ -313,6 +314,7 @@ function startNewRound() {
     G.nRounds += 1;
     S.balls = [];
     S.targets = [];
+    S.scores = [];
     G.longestChainInRound = 0,
     G.timewarpFuel = G.timewarp,
     createBalls();
@@ -401,6 +403,7 @@ function updateGame() {
     drawBalls();
     drawTargets();
     drawOverlay();
+    drawScores();
     processCollisions();
     updateMagnet();
     cleanUp();
@@ -470,6 +473,16 @@ function cleanUp() {
     for(i=indices.length-1; i>=0; i--) {
         S.targets.splice(indices[i], 1);
     }
+    indices = [];
+    for(i=S.scores.length-1; i>=0; i--) {
+        var score = S.scores[i];
+        if(score.lifetime <= 0) {
+            indices.push(i);
+        }
+    }
+    for(i=indices.length-1; i>=0; i--) {
+        S.scores.splice(indices[i], 1);
+    }
 }
 
 function tick() {
@@ -480,6 +493,10 @@ function tick() {
     for(i=S.targets.length-1; i>=0; i--) {
         var target = S.targets[i];
         target.tick();
+    }
+    for(i=S.scores.length-1; i>=0; i--) {
+        var score = S.scores[i];
+        score.tick();
     }
 }
 
@@ -504,7 +521,7 @@ function processCollisions() {
                     ball.highlight_time = G.maxHighlightTime;
                     return;
                 }
-
+                // Collision
                 chain = target.chain + 1
                 if(chain > G.longestChain) {
                     G.longestChain = chain;
@@ -518,7 +535,10 @@ function processCollisions() {
                     chain
                 );
                 S.targets.push(new_target);
-                points = Math.pow(G.multiplier, target.chain);
+                points = Math.ceil(Math.pow(G.multiplier, target.chain));
+
+                S.scores.push(new Score(ball.x, ball.y, points));
+                console.log(points);
 
                 addPoints(points);
                 S.balls.splice(i, 1);
@@ -574,6 +594,13 @@ function drawTargets() {
     for(i=S.targets.length-1; i>=0; i--) {
         var target = S.targets[i];
         target.draw();
+    }
+}
+
+function drawScores() {
+    for(i=S.scores.length-1; i>=0; i--) {
+        var score = S.scores[i];
+        score.draw();
     }
 }
 

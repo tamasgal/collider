@@ -100,3 +100,28 @@ var Target = function(x, y, chain=1) {
         ctx.fillText(this.chain, this.x, this.y);
     }
 }
+
+
+var Score = function(x, y, value) {
+    this.x = x;
+    this.y = y;
+    this.value = value;
+    this.lifetime = 100;
+
+    this.tick = function() {
+        this.lifetime -= 1;
+        this.y -= 1;
+    }
+
+    this.draw = function() {
+        ctx.beginPath();
+        ctx.globalAlpha = 0.8;
+        ctx.font = "bold 12px Courier";
+        ctx.textBaseline = 'middle';
+        ctx.textAlign = 'center';
+        a = Math.pow(this.lifetime / 100, 2);
+        ctx.fillStyle = 'rgb(0, 0, 0, ' + a + ')';
+        ctx.fillText(C.currency + " " + this.value, this.x, this.y);
+        ctx.globalAlpha = 1.0;
+    }
+}
