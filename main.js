@@ -333,7 +333,7 @@ function drawStats() {
     ctx.fillStyle = "#222";
     ctx.fillText(C.currency + ' '+ Math.round(G.points_), x0 + 10, y0);
     ctx.fillStyle = "#555";
-    ctx.fillText("LONGEST CHAIN " + G.longestChain, x0 + 10, y0 + 12);
+    ctx.fillText("LONGEST CHAIN " + G.longestChain + " (" + G.longestChainInRound + ")", x0 + 10, y0 + 12);
 }
 
 function resizeCanvas() {
