@@ -34,6 +34,8 @@ var G = {
     "timewarpFuel": 0,
     "isTimewarping": false,
 
+    "repulsionProb": 0,
+
     "inMenu": true,
     "inGame": false,
     "targetSet": false,
@@ -247,6 +249,19 @@ function initGUI() {
             }
         )
     );
+    GUI.buttons.push(
+        new UpgradeButton("REPULSION", 50, 275, 180, 20,
+            displayValue = function() {
+                return G.repulsionProb;
+            },
+            upgrade = function() {
+                G.repulsionProb += .01;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(3, level);
+            }
+        )
+    );
 }
 
 function startNewRound() {
@@ -431,6 +446,18 @@ function processCollisions() {
             var target = S.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
+                if (Math.random() < G.repulsionProb){
+                    target.lifetime = G.lifetime;
+                    target.chain += 1;
+                    v = new Point(ball.dx, ball.dy);
+                    x1 = new Point(ball.x, ball.y);
+                    x2 = new Point(target.x, target.y);
+                    v_ = sub(v, scalarMult(2 * dot(v, sub(x1, x2)) / Math.pow(norm(sub(x1, x2)), 2), sub(x1, x2)));
+                    ball.dx = v_.x;
+                    ball.dy = v_.y;
+                    return;
+                }
+
                 chain = target.chain + 1
                 if(chain > G.longestChain) {
                     G.longestChain = chain;
@@ -452,6 +479,18 @@ function processCollisions() {
             }
         }
     }
+}
+
+function scalarMult(s, v){
+    return new Point(s * v.x, s * v.y);
+}
+
+function dot(v1, v2){
+    return v1.x * v2.x + v1.y * v2.y;
+}
+
+function sub(v1, v2){
+    return new Point(v1.x - v2.x, v1.y - v2.y);
 }
 
 function norm(v) {
