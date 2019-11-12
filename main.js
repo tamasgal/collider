@@ -579,9 +579,18 @@ function drawTargets() {
 
 function startDrag(evt) {
     drag = true;
+    if(1 == evt.which && G.inGame)
+    {
+        G.isTimewarping = true;
+    }
 }
 
 function stopDrag(evt) {
+    if(1 == evt.which && G.inGame)
+    {
+        G.isTimewarping = false;
+        clickInGame(evt);
+    }
     drag = false;
 }
 
@@ -594,9 +603,6 @@ function mouseMoved(evt) {
 }
 
 function mouseClicked(evt) {
-    if(G.inGame) {
-        clickInGame(evt);
-    }
     if(G.inMenu) {
         clickInMenu(evt);
     }
@@ -664,9 +670,6 @@ function keyDown(evt) {
     }
     if(k == KEY.ctrl) {
         G.upgradeFactor = "MAX";
-    }
-    if(k == KEY.space) {
-        G.isTimewarping = true;
     }
     egg.push(k);
     check3DEllipsoid();
