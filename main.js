@@ -21,7 +21,7 @@ var C = {
 var G = {
     "nRounds": 0,
     "nBalls": 16,
-    "world": {"width": 600, "height": 400},
+    "world": {"width": 800, "height": 600},
     "mouse": {"x": 0, "y": 0},
 
     "points": 0,
