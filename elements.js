@@ -82,7 +82,7 @@ var Target = function(x, y, chain=1) {
             radius = G.targetSize;
         }
         var a = this.lifetime / G.lifetime;
-        var r = this.chain / G.n_balls;
+        var r = this.chain / G.nBalls;
         var g = 0;
         var b = 1 - r;
         ctx.beginPath();

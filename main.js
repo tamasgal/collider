@@ -19,7 +19,8 @@ var C = {
 }
 
 var G = {
-    "n_balls": 16,
+    "nRounds": 0,
+    "nBalls": 16,
     "world": {"width": 600, "height": 400},
     "mouse": {"x": 0, "y": 0},
 
@@ -156,7 +157,7 @@ function reset() {
 }
 
 function initGUI() {
-    GUI.buttons.push(new Button("NEW ROUND", 50, 50, 100, 20, clickNewRound));
+    GUI.buttons.push(new Button("START ROUND #" + G.nRounds, 50, 50, 180, 20, clickNewRound));
     GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 275, 100, 20, restoreState));
     GUI.buttons.push(new Button("SAVE", G.world.width-50-100, 300, 100, 20, saveState));
     GUI.buttons.push(
@@ -175,10 +176,10 @@ function initGUI() {
     GUI.buttons.push(
         new UpgradeButton("BALLS", 50, 125, 180, 20,
             displayValue = function() {
-                return G.n_balls;
+                return G.nBalls;
             },
             upgrade = function() {
-                G.n_balls += 1;
+                G.nBalls += 1;
             },
             upgradeCost = function(level) {
                 return Math.pow(4, level);
@@ -266,6 +267,7 @@ function initGUI() {
 }
 
 function startNewRound() {
+    G.nRounds += 1;
     S.balls = [];
     S.targets = [];
     G.longestChainInRound = 0,
@@ -275,7 +277,7 @@ function startNewRound() {
 
 function createBalls()  {
     var x, y, r, v;
-    for(i=0; i<G.n_balls; i++) {
+    for(i=0; i<G.nBalls; i++) {
         r = 5;
         x = (G.world.width - 2 * r) * Math.random() + r;
         y = (G.world.height - 2 * r) * Math.random() + r;

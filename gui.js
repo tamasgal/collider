@@ -15,9 +15,9 @@ var Button = function(text, x, y, width, height, callback) {
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = C.button_text;
         ctx.font = "bold 15px Courier";
-        ctx.textAlign = 'left';
+        ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(this.text, this.x + 5, this.y + Math.round(this.height / 2));
+        ctx.fillText(this.text, this.x + this.width / 2, this.y + Math.round(this.height / 2) + 1);
     }
 
     this.click = function() {
