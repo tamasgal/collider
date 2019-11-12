@@ -10,6 +10,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.dy = dy;
     this.r = r;
     this.c = c;
+    this.highlight_time = 0;
 
     this.tick = function() {
         if (this.x + this.dx > G.world.width - this.r || this.x + this.dx < this.r) {
@@ -32,6 +33,10 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
             dy /= G.timewarpFactor;
         }
 
+        if(this.highlight_time > 0) {
+            this.highlight_time -= 1;
+        }
+
         x = this.x + dx;
         y = this.y + dy;
         this.x = x;
@@ -45,6 +50,11 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
         ctx.globalAlpha = 1.0;
+        if(this.highlight_time > 0) {
+            ctx.fillStyle = rgba(0, 0, 1, this.highlight_time / G.maxHighlightTime);
+            ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
+            ctx.fill();
+        }
     }
 }
 

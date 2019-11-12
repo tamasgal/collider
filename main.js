@@ -35,6 +35,7 @@ var G = {
     "isTimewarping": false,
 
     "repulsionProb": 0,
+    "maxHighlightTime": 100,
 
     "inMenu": true,
     "inGame": false,
@@ -455,6 +456,7 @@ function processCollisions() {
                     v_ = sub(v, scalarMult(2 * dot(v, sub(x1, x2)) / Math.pow(norm(sub(x1, x2)), 2), sub(x1, x2)));
                     ball.dx = v_.x;
                     ball.dy = v_.y;
+                    ball.highlight_time = G.maxHighlightTime;
                     return;
                 }
 
