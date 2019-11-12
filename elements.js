@@ -119,7 +119,7 @@ var Score = function(x, y, value) {
         ctx.font = "bold 12px Courier";
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
-        a = Math.pow(this.lifetime / 100, 2);
+        a = Math.pow(this.lifetime / 100, 3);
         ctx.fillStyle = 'rgb(0, 0, 0, ' + a + ')';
         ctx.fillText(C.currency + " " + this.value, this.x, this.y);
         ctx.globalAlpha = 1.0;
