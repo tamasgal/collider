@@ -161,7 +161,7 @@ function initGUI() {
     GUI.buttons.push(
         new UpgradeButton("MULTIPLIER", 50, 100, 180, 20,
             displayValue = function() {
-                return G.multiplier.toPrecision(2);
+                return G.multiplier.toPrecision(3);
             },
             upgrade = function() {
                 G.multiplier *= 1.1;
@@ -252,7 +252,7 @@ function initGUI() {
     GUI.buttons.push(
         new UpgradeButton("REPULSION", 50, 275, 180, 20,
             displayValue = function() {
-                return G.repulsionProb;
+                return G.repulsionProb.toPrecision(3);
             },
             upgrade = function() {
                 G.repulsionProb += .01;
