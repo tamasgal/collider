@@ -453,12 +453,27 @@ function processCollisions() {
     }
 }
 
+function norm(v) {
+    return Math.sqrt(Math.pow(v.x, 2) +  Math.pow(v.y, 2));
+}
+
+function unit(v) {
+    n = norm(v);
+    return new Point(v.x / n, v.y / n);
+}
+
 function addPoints(p) {
     G.points += Math.ceil(p);
 }
 
 function distance(thing1, thing2) {
     return Math.sqrt(Math.pow(thing1.x - thing2.x, 2) + Math.pow(thing1.y - thing2.y, 2));
+}
+
+function angle_between(v1, v2) {
+    v1 = unit(v1);
+    v2 = unit(v2);
+    return Math.acos(v1.x * v2.x + v1.y * v2.y);
 }
 
 function drawBalls() {
