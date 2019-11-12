@@ -26,6 +26,10 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
             this.dx += mdx;
             this.dy += mdy;
         }
+        if(G.viscosity > 0) {
+            this.dx /= (1 + G.viscosity);
+            this.dy /= (1 + G.viscosity);
+        }
         dx = this.dx;
         dy = this.dy;
         if(G.isTimewarping) {

@@ -38,6 +38,8 @@ var G = {
     "repulsionProb": 0,
     "maxHighlightTime": 100,
 
+    "viscosity": 0,
+
     "inMenu": true,
     "inGame": false,
     "targetSet": false,
@@ -258,6 +260,19 @@ function initGUI() {
             },
             upgrade = function() {
                 G.repulsionProb += .01;
+            },
+            upgradeCost = function(level) {
+                return Math.pow(3, level);
+            }
+        )
+    );
+    GUI.buttons.push(
+        new UpgradeButton("VISCOSITY", 50, 300, 180, 20,
+            displayValue = function() {
+                return G.viscosity.toPrecision(3);
+            },
+            upgrade = function() {
+                G.viscosity += .001;
             },
             upgradeCost = function(level) {
                 return Math.pow(3, level);
