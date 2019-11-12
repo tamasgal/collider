@@ -11,6 +11,8 @@ var Button = function(text, x, y, width, height, callback) {
     this.callback = callback;
 
     this.draw = function() {
+        ctx.fillStyle = C.button_shadow;
+        ctx.fillRect(this.x+2, this.y+2, this.width, this.height);
         ctx.fillStyle = C.button;
         ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.fillStyle = C.button_text;
@@ -60,15 +62,17 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     }
 
     this.draw = function() {
-        ctx.fillStyle = '#fff';
-        this.adjustUpgradeProgress();
-        ctx.fillRect(this.x, this.y + this.height, this.upgradeProgress * this.width, 2);
+        ctx.fillStyle = C.button_shadow;
+        ctx.fillRect(this.x+2, this.y+2, this.width, this.height);
         if(G.points >= this.nextUpgrade()) {
             ctx.fillStyle = C.upgrade_button_active;
         } else {
             ctx.fillStyle = C.upgrade_button_inactive;
         }
         ctx.fillRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = '#fff';
+        this.adjustUpgradeProgress();
+        ctx.fillRect(this.x, this.y + this.height-2, this.upgradeProgress * this.width, 2);
         ctx.fillStyle = C.button_text;
         ctx.font = "bold 13px Courier";
         ctx.textAlign = 'left';
@@ -81,11 +85,11 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
                 suffix = " + " + G.upgradeFactor;
             }
         }
-        ctx.fillText(this.text, this.x + 5, this.y + Math.round(this.height / 2) + 2);
+        ctx.fillText(this.text, this.x + 5, this.y + Math.round(this.height / 2));
         ctx.textAlign = 'right';
-        ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2) + 2);
+        ctx.fillText(this.displayValue(), this.x + this.width - 5, this.y + Math.round(this.height / 2));
         ctx.textAlign = 'left';
-        ctx.fillText("LVL " + this.getLevel() + suffix, this.x + this.width + 5, this.y + Math.round(this.height / 2) + 2);
+        ctx.fillText("LVL " + this.getLevel() + suffix, this.x + this.width + 5, this.y + Math.round(this.height / 2));
     }
 
     this.click = function() {

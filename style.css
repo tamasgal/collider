@@ -5,6 +5,13 @@ html, body {
     border: 0;
     overflow: hidden; /*  Disable scrollbars */
     display: block;  /* No floating content on sides */
+    background: repeating-radial-gradient(
+      circle,
+      #eeeeee,
+      #eeeeee 10px,
+      #e5e5e5 10px, 
+      #e5e5e5 30px
+    );
 }
 
 #content {
@@ -19,4 +26,6 @@ html, body {
     /* left:0px; */
     /* top:0px; */
     /* border: 1px solid red; */
+    /* width: 800px; */
+    /* height: 600px; */
 }
