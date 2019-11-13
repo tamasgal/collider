@@ -9,9 +9,14 @@ var Button = function(text, x, y, width, height, callback) {
     this.width = width;
     this.height = height;
     this.callback = callback;
+    this.isHovered = false;
 
     this.draw = function() {
-        ctx.fillStyle = C.button_shadow;
+        if(this.isHovered) {
+            ctx.fillStyle = C.button_shadow_highlighted;
+        } else {
+            ctx.fillStyle = C.button_shadow;
+        }
         ctx.fillRect(this.x+2, this.y+2, this.width, this.height);
         ctx.fillStyle = C.button;
         ctx.fillRect(this.x, this.y, this.width, this.height);
@@ -44,6 +49,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.displayValue = displayValue;
     this.upgradeCost = upgradeCost;
     this.upgradeProgress = 0.0;
+    this.isHovered = false;
 
     this.getLevel = function() {
         if(G["upgrades"][this.text] === undefined) {
@@ -62,7 +68,11 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     }
 
     this.draw = function() {
-        ctx.fillStyle = C.button_shadow;
+        if(this.isHovered) {
+            ctx.fillStyle = C.button_shadow_highlighted;
+        } else {
+            ctx.fillStyle = C.button_shadow;
+        }
         ctx.fillRect(this.x+2, this.y+2, this.width, this.height);
         if(G.points >= this.nextUpgrade()) {
             ctx.fillStyle = C.upgrade_button_active;

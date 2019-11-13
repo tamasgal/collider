@@ -12,6 +12,7 @@ var ctx;
 var C = {
     "button": rgba(0, 0.5, 0.7, 1.0, offset=150),
     "button_shadow": rgba(0, 0.1, 0.1, 1.0, offset=150),
+    "button_shadow_highlighted": rgba(0, 0.1, 0.1, 1.0, offset=80),
     "button_clicked": "red",
     "button_text": "#333",
     "upgrade_button_active": rgba(0, 0.8, 0, 1.0, offset=150),
@@ -357,6 +358,9 @@ function drawMenu() {
         button.draw();
         if(isInside(G.mouse.x, G.mouse.y, button)) {
             button.hover(G.mouse.x, G.mouse.y);
+            button.isHovered = true;
+        } else {
+            button.isHovered = false;
         }
     }
 }
