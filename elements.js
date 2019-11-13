@@ -116,7 +116,7 @@ var Score = function(x, y, value) {
     this.draw = function() {
         ctx.beginPath();
         ctx.globalAlpha = 0.8;
-        ctx.font = "bold 12px Courier";
+        ctx.font = "bold 15px Courier";
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         a = Math.pow(this.lifetime / 100, 3);
