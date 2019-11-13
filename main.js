@@ -190,7 +190,7 @@ function reset() {
 }
 
 function initGUI() {
-    GUI.buttons.push(new Button("START ROUND #" + G.nRounds, 50, 50, 180, 20, clickNewRound));
+    GUI.buttons.push(new Button("START ROUND", 50, 50, 180, 20, clickNewRound));
     GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 275, 100, 20, restoreState));
     GUI.buttons.push(new Button("SAVE", G.world.width-50-100, 300, 100, 20, saveState));
     GUI.buttons.push(
@@ -388,7 +388,12 @@ function drawStats() {
     ctx.fillText(C.currency + ' '+ Math.round(G.points_), x0 + 10, y0);
     ctx.font = "bold 12px Courier";
     ctx.fillStyle = "#555";
-    ctx.fillText("LONGEST CHAIN " + G.longestChain + " (" + G.longestChainInRound + ")", x0 + 10, y0 + 20);
+    ctx.fillText(
+        "ROUND " + G.nRounds +
+        ", LONGEST CHAIN " + G.longestChain + 
+        " (" + G.longestChainInRound + ")",
+        x0 + 10, y0 + 20
+    );
 }
 
 function resizeCanvas() {
