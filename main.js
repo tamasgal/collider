@@ -524,6 +524,9 @@ function processCollisions() {
             var target = S.targets[j];
             d = distance(ball, target);
             if(d < ball.r + target.r) {
+                points = Math.ceil(Math.pow(G.multiplier, target.chain));
+                addPointsXY(points, ball.x, ball.y);
+
                 if (Math.random() < G.repulsionProb){
                     target.lifetime = G.lifetime;
                     target.chain += 1;
@@ -550,17 +553,16 @@ function processCollisions() {
                     chain
                 );
                 S.targets.push(new_target);
-                points = Math.ceil(Math.pow(G.multiplier, target.chain));
-
-                S.scores.push(new Score(ball.x, ball.y, points));
-                console.log(points);
-
-                addPoints(points);
                 S.balls.splice(i, 1);
                 return;
             }
         }
     }
+}
+
+function addPointsXY(points, x, y) {
+    S.scores.push(new Score(x, y, points));
+    addPoints(points);
 }
 
 function scalarMult(s, v){
