@@ -111,7 +111,7 @@ var Score = function(x, y, value, flavor) {
 
     this.tick = function() {
         this.lifetime -= 1;
-        this.y -= 1;
+        this.y -= 2;
     }
 
     this.draw = function() {
@@ -119,10 +119,10 @@ var Score = function(x, y, value, flavor) {
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         a = Math.pow(this.lifetime / 100, 3);
-        ctx.font = "bold " + (15 + Math.floor(a*20)) + "px Courier";
+        ctx.font = "bold " + (15 + Math.floor(a*40)) + "px Courier";
         ctx.globalAlpha = a;
         ctx.fillStyle = FLAVOR_COLORS[this.flavor];
-        ctx.fillText(C.currency + " " + this.value, this.x, this.y);
+        ctx.fillText(this.value, this.x, this.y);
         ctx.globalAlpha = 1;
     }
 }

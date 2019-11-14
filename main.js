@@ -98,6 +98,8 @@ var S = {
     "balls": [],
     "targets": [],
     "scores": [],
+    "roundPoints": zeros(FLAVOR_COLORS.length),
+    "roundPoints_": zeros(FLAVOR_COLORS.length),
 }
 
 var GUI = {
@@ -341,6 +343,8 @@ function startNewRound() {
     S.balls = [];
     S.targets = [];
     S.scores = [];
+    S.roundPoints = zeros(FLAVOR_COLORS.length),
+    S.roundPoints_ = zeros(FLAVOR_COLORS.length),
     G.longestChainInRound = 0,
     G.timewarpFuel = G.timewarp,
     createBalls();
@@ -403,6 +407,29 @@ function drawStats() {
 
     var x0 = 0;
     var y0 = G.world.height - 38;
+
+    for(var i=FLAVOR_COLORS.length-1; i>=0; i--) {
+        if(i > G.ascension) {
+            continue;
+        }
+        color = FLAVOR_COLORS[i];
+        p = S.roundPoints[i];
+        p_ = S.roundPoints_[i];
+
+        if(p != p_) {
+            if(Math.abs(p - p_) < 10) {
+                S.roundPoints_[i] = p;
+            } else {
+                S.roundPoints_[i] += Math.round((p - p_) / 2);
+            }
+        }
+        // ctx.fillRect(x0, y0, G.world.width, 1);
+        ctx.font = "bold 17px Courier";
+        ctx.textBaseline = 'top';
+        ctx.textAlign = 'right';
+        ctx.fillStyle = color;
+        ctx.fillText(Math.round(S.roundPoints_[i]) + ' ' + C.currency, G.world.width - 10, y0 - 17 * i);
+    }
 
     for(var i=FLAVOR_COLORS.length-1; i>=0; i--) {
         if(i > G.ascension) {
@@ -566,6 +593,7 @@ function processCollisions() {
             if(d < ball.r + target.r) {
                 points = Math.ceil(Math.pow(G.multiplier, target.chain));
                 addPointsXY(points, ball.x, ball.y, ball.flavor);
+                S.roundPoints[ball.flavor] += points;
 
                 if (Math.random() < G.repulsionProb){
                     target.lifetime = G.lifetime;
