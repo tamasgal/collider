@@ -50,6 +50,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.upgradeCost = upgradeCost;
     this.upgradeProgress = 0.0;
     this.isHovered = false;
+    this.hidden = true;
 
     this.getLevel = function() {
         if(G["upgrades"][this.text] === undefined) {
@@ -68,8 +69,12 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     }
 
     this.draw = function() {
-        if(this.getLevel() == 0 && G.points < this.nextUpgrade()) {
-            return;
+        if(this.hidden) {
+            if(G.points >= this.nextUpgrade()) {
+                this.hidden = false;
+            } else {
+                return;
+            }
         }
         if(this.isHovered) {
             ctx.fillStyle = C.button_shadow_highlighted;
@@ -120,6 +125,9 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         }
     }
     this.hover = function(x, y) {
+        if(this.hidden) {
+            return;
+        }
         ctx.fillStyle = '#fff';
         ctx.font = "bold 10px Courier";
         ctx.textAlign = 'left';
