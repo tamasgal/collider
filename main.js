@@ -61,7 +61,7 @@ var G = {
 
     "upgrades": {},
 
-    "assension": 0,
+    "ascension": 0,
 }
 
 // cost scaling
@@ -347,8 +347,8 @@ function createBalls()  {
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
         flavor = 0;
-        for(j=1; j<=G.assension; j++) {
-            threshold = Math.pow((1 - j/(G.assension + 1)), 2);
+        for(j=1; j<=G.ascension; j++) {
+            threshold = Math.pow((1 - j/(G.ascension + 1)), 2);
             if(Math.random() < threshold) {
                 flavor = j;
             }
@@ -395,7 +395,7 @@ function drawStats() {
     var y0 = G.world.height - 38;
 
     for(var i=FLAVOR_COLORS.length-1; i>=0; i--) {
-        if(i > G.assension) {
+        if(i > G.ascension) {
             continue;
         }
         color = FLAVOR_COLORS[i];
