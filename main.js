@@ -675,6 +675,15 @@ function angle_between(v1, v2) {
 function drawBalls() {
     for(i=S.balls.length-1; i>=0; i--) {
         var ball = S.balls[i];
+        if(G.magnet.factor > 0 && G.targetSet) {
+            ctx.strokeStyle='rgba(255, 255, 255, 0.8)';
+
+            ctx.beginPath();
+            ctx.moveTo(ball.x, ball.y);
+            ctx.quadraticCurveTo(ball.x + ball.dx * 20, ball.y + ball.dy * 20, G.magnet.x, G.magnet.y);
+            // console.log(ball.x + ball.dx, ball.y + ball.dy, G.magnet.x, G.magnet.y);
+            ctx.stroke();
+        }
         ball.draw();
     }
 }
