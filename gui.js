@@ -68,6 +68,9 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     }
 
     this.draw = function() {
+        if(this.getLevel() == 0 && G.points < this.nextUpgrade()) {
+            return;
+        }
         if(this.isHovered) {
             ctx.fillStyle = C.button_shadow_highlighted;
         } else {
