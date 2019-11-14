@@ -3,13 +3,13 @@ var Point = function(x, y) {
     this.y = y;
 }
 
-var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
+var Ball = function(x, y, dx, dy, r, flavor) {
     this.x = x;
     this.y = y;
     this.dx = dx;
     this.dy = dy;
     this.r = r;
-    this.c = c;
+    this.flavor = flavor;
     this.highlight_time = 0;
 
     this.tick = function() {
@@ -50,7 +50,7 @@ var Ball = function(x, y, dx, dy, r, c='#f55b5b') {
     this.draw = function() {
         ctx.beginPath();
         ctx.globalAlpha = 0.8;
-        ctx.fillStyle = this.c;
+        ctx.fillStyle = FLAVOR_COLORS[this.flavor];
         ctx.arc(this.x, this.y, this.r, 0, 2*Math.PI);
         ctx.fill();
         ctx.globalAlpha = 1.0;
@@ -102,11 +102,12 @@ var Target = function(x, y, chain=1) {
 }
 
 
-var Score = function(x, y, value) {
+var Score = function(x, y, value, flavor) {
     this.x = x;
     this.y = y;
     this.value = value;
     this.lifetime = 100;
+    this.flavor = flavor;
 
     this.tick = function() {
         this.lifetime -= 1;
@@ -115,13 +116,13 @@ var Score = function(x, y, value) {
 
     this.draw = function() {
         ctx.beginPath();
-        ctx.globalAlpha = 0.8;
         ctx.font = "bold 15px Courier";
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         a = Math.pow(this.lifetime / 100, 3);
-        ctx.fillStyle = 'rgb(0, 0, 0, ' + a + ')';
+        ctx.globalAlpha = a;
+        ctx.fillStyle = FLAVOR_COLORS[this.flavor];
         ctx.fillText(C.currency + " " + this.value, this.x, this.y);
-        ctx.globalAlpha = 1.0;
+        ctx.globalAlpha = 1;
     }
 }

@@ -20,14 +20,22 @@ var C = {
     "currency": "\u{25CF}",
 }
 
+var FLAVOR_COLORS = [
+    rgba(1, 0, 0, 1.0),
+    rgba(0, 0, 1, 1.0),
+    rgba(0, 1, 0.5, 1.0),
+    rgba(0.8, 0.6, 0, 1.0),
+    rgba(0.23, 0.83, 0.78, 1.0)
+];
+
 var G = {
     "nRounds": 0,
     "nBalls": 16,
     "world": {"width": 800, "height": 600},
     "mouse": {"x": 0, "y": 0},
 
-    "points": 0,
-    "points_": 0,
+    "points": zeros(FLAVOR_COLORS.length),
+    "points_": zeros(FLAVOR_COLORS.length),
     "multiplier": 1.1,
     "lifetime": 100,
     "targetSize": 20,
@@ -52,6 +60,8 @@ var G = {
     "upgradeFactor": 1,
 
     "upgrades": {},
+
+    "assension": 0,
 }
 
 // cost scaling
@@ -117,6 +127,10 @@ window.onload = function() {
     var fps = 60.;
     setInterval(update, 1000/fps);
     // setInterval(saveState, 1000);
+}
+
+function zeros(n) {
+    return Array.apply(null, Array(n)).map(Number.prototype.valueOf,0);
 }
 
 function restoreState() {
@@ -332,7 +346,14 @@ function createBalls()  {
         v = Math.random() * 3 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
-        S.balls.push( new Ball(x, y, dx, dy, r) );
+        flavor = 0;
+        for(j=1; j<=G.assension; j++) {
+            threshold = Math.pow((1 - j/(G.assension + 1)), 2);
+            if(Math.random() < threshold) {
+                flavor = j;
+            }
+        }
+        S.balls.push( new Ball(x, y, dx, dy, r, flavor) );
     }
 }
 
@@ -373,19 +394,28 @@ function drawStats() {
     var x0 = 0;
     var y0 = G.world.height - 38;
 
-    if(G.points != G.points_) {
-        if(Math.abs(G.points - G.points_) < 10) {
-            G.points_ = G.points;
-        } else {
-            G.points_ += Math.round((G.points - G.points_) / 2);
+    for(var i=FLAVOR_COLORS.length-1; i>=0; i--) {
+        if(i > G.assension) {
+            continue;
         }
+        color = FLAVOR_COLORS[i];
+        p = G.points[i];
+        p_ = G.points_[i];
+
+        if(p != p_) {
+            if(Math.abs(p - p_) < 10) {
+                G.points_[i] = p;
+            } else {
+                G.points_[i] += Math.round((p - p_) / 2);
+            }
+        }
+        // ctx.fillRect(x0, y0, G.world.width, 1);
+        ctx.font = "bold 17px Courier";
+        ctx.textBaseline = 'top';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = color;
+        ctx.fillText(C.currency + ' '+ Math.round(G.points_[i]), x0 + 10, y0 - 17 * i);
     }
-    // ctx.fillRect(x0, y0, G.world.width, 1);
-    ctx.font = "bold 17px Courier";
-    ctx.textBaseline = 'top';
-    ctx.textAlign = 'left';
-    ctx.fillStyle = "#222";
-    ctx.fillText(C.currency + ' '+ Math.round(G.points_), x0 + 10, y0);
     ctx.font = "bold 12px Courier";
     ctx.fillStyle = "#555";
     ctx.fillText(
@@ -525,7 +555,7 @@ function processCollisions() {
             d = distance(ball, target);
             if(d < ball.r + target.r) {
                 points = Math.ceil(Math.pow(G.multiplier, target.chain));
-                addPointsXY(points, ball.x, ball.y);
+                addPointsXY(points, ball.x, ball.y, ball.flavor);
 
                 if (Math.random() < G.repulsionProb){
                     target.lifetime = G.lifetime;
@@ -560,9 +590,9 @@ function processCollisions() {
     }
 }
 
-function addPointsXY(points, x, y) {
-    S.scores.push(new Score(x, y, points));
-    addPoints(points);
+function addPointsXY(points, x, y, flavor) {
+    S.scores.push(new Score(x, y, points, flavor));
+    addPoints(points, flavor);
 }
 
 function scalarMult(s, v){
@@ -586,8 +616,8 @@ function unit(v) {
     return new Point(v.x / n, v.y / n);
 }
 
-function addPoints(p) {
-    G.points += Math.ceil(p);
+function addPoints(p, flavor) {
+    G.points[flavor] += Math.ceil(p);
 }
 
 function distance(thing1, thing2) {
