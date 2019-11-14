@@ -602,7 +602,7 @@ function processCollisions() {
 
 function addPointsXY(points, x, y, flavor) {
     S.scores.push(new Score(x, y, points, flavor));
-    S.points[flavor] += points;
+    G.points[flavor] += points;
 }
 
 function scalarMult(s, v){
