@@ -116,10 +116,10 @@ var Score = function(x, y, value, flavor) {
 
     this.draw = function() {
         ctx.beginPath();
-        ctx.font = "bold 15px Courier";
         ctx.textBaseline = 'middle';
         ctx.textAlign = 'center';
         a = Math.pow(this.lifetime / 100, 3);
+        ctx.font = "bold " + (15 + Math.floor(a*20)) + "px Courier";
         ctx.globalAlpha = a;
         ctx.fillStyle = FLAVOR_COLORS[this.flavor];
         ctx.fillText(C.currency + " " + this.value, this.x, this.y);
