@@ -629,7 +629,6 @@ function unit(v) {
 // Use only with positive numbers!!!!!!!!! ahahahahah
 function subtractPoints(p) {
     new_p = totalPoints() - p;
-    console.log(new_p);
     for(var i=0; i<G.points.length; i++) {
         G.points[i] = Math.floor(new_p % Math.pow(G.currencyScaling, i + 1) / Math.pow(G.currencyScaling, i));
     }

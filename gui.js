@@ -92,8 +92,11 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         ctx.fillStyle = '#fff';
         this.adjustUpgradeProgress();
         ctx.fillRect(this.x, this.y + this.height-2, this.upgradeProgress * this.width, 2);
-        ctx.fillStyle = FLAVOR_COLORS[this.flavor];
+
+        // Flavor indicator
+        ctx.fillStyle = FLAVOR_COLORS[Math.floor(Math.log10(this.nextUpgrade()) / Math.log10(G.currencyScaling))];
         ctx.fillRect(this.x, this.y, 5, this.height);
+
         ctx.fillStyle = C.button_text;
         ctx.font = "bold 13px Courier";
         ctx.textAlign = 'left';
