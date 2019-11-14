@@ -62,6 +62,8 @@ var G = {
     "upgrades": {},
 
     "ascension": 0,
+
+    "currencyScaling": 1000,
 }
 
 // cost scaling
@@ -131,6 +133,14 @@ window.onload = function() {
 
 function zeros(n) {
     return Array.apply(null, Array(n)).map(Number.prototype.valueOf,0);
+}
+
+function totalPoints() {
+    var p = 0;
+    for(var i=0; i<G.points.length; i++) {
+        p += G.points[i] * Math.pow(G.currencyScaling, i);
+    }
+    return p;
 }
 
 function restoreState() {
@@ -218,7 +228,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.multiplier, level);
             },
-            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -232,7 +241,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.nBalls, level);
             },
-            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -246,7 +254,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.targetSize, level);
             },
-            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -260,7 +267,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.lifetime, level);
             },
-            flavor = 0
         )
     );
     GUI.buttons.push(
@@ -274,7 +280,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.magnet, level);
             },
-            flavor = 1
         )
     );
     GUI.buttons.push(
@@ -288,7 +293,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.timewarp, level);
             },
-            flavor = 2
         )
     );
     GUI.buttons.push(
@@ -302,7 +306,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.timewarpFactor, level);
             },
-            flavor = 2
         )
     );
     GUI.buttons.push(
@@ -316,7 +319,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.repulsion, level);
             },
-            flavor = 3
         )
     );
     GUI.buttons.push(
@@ -330,7 +332,6 @@ function initGUI() {
             upgradeCost = function(level) {
                 return Math.pow(CS.viscosity, level);
             },
-            flavor = 4
         )
     );
 }
@@ -601,7 +602,7 @@ function processCollisions() {
 
 function addPointsXY(points, x, y, flavor) {
     S.scores.push(new Score(x, y, points, flavor));
-    addPoints(points, flavor);
+    S.points[flavor] += points;
 }
 
 function scalarMult(s, v){
@@ -625,8 +626,13 @@ function unit(v) {
     return new Point(v.x / n, v.y / n);
 }
 
-function addPoints(p, flavor) {
-    G.points[flavor] += Math.ceil(p);
+// Use only with positive numbers!!!!!!!!! ahahahahah
+function subtractPoints(p) {
+    new_p = totalPoints() - p;
+    console.log(new_p);
+    for(var i=0; i<G.points.length; i++) {
+        G.points[i] = Math.floor(new_p % Math.pow(G.currencyScaling, i + 1) / Math.pow(G.currencyScaling, i));
+    }
 }
 
 function distance(thing1, thing2) {
