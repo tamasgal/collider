@@ -217,7 +217,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.multiplier, level);
-            }
+            },
+            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -230,7 +231,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.nBalls, level);
-            }
+            },
+            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -243,7 +245,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.targetSize, level);
-            }
+            },
+            flavor = 0,
         )
     );
     GUI.buttons.push(
@@ -256,7 +259,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.lifetime, level);
-            }
+            },
+            flavor = 0
         )
     );
     GUI.buttons.push(
@@ -269,7 +273,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.magnet, level);
-            }
+            },
+            flavor = 1
         )
     );
     GUI.buttons.push(
@@ -282,7 +287,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.timewarp, level);
-            }
+            },
+            flavor = 2
         )
     );
     GUI.buttons.push(
@@ -295,7 +301,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.timewarpFactor, level);
-            }
+            },
+            flavor = 2
         )
     );
     GUI.buttons.push(
@@ -308,7 +315,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.repulsion, level);
-            }
+            },
+            flavor = 3
         )
     );
     GUI.buttons.push(
@@ -321,7 +329,8 @@ function initGUI() {
             },
             upgradeCost = function(level) {
                 return Math.pow(CS.viscosity, level);
-            }
+            },
+            flavor = 4
         )
     );
 }

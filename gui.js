@@ -39,7 +39,7 @@ var Button = function(text, x, y, width, height, callback) {
 // the points, so `upgrade` only has to implement the actual effect.
 // The `upgradeCost(level)` function returns the cost of the upgrade for
 // the given level.
-var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, upgradeCost) {
+var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, upgradeCost, flavor) {
     this.text = text;
     this.x = x;
     this.y = y;
@@ -51,6 +51,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
     this.upgradeProgress = 0.0;
     this.isHovered = false;
     this.hidden = true;
+    this.flavor = flavor;
 
     this.getLevel = function() {
         if(G["upgrades"][this.text] === undefined) {
@@ -70,7 +71,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
 
     this.draw = function() {
         if(this.hidden) {
-            if(G.points >= this.nextUpgrade()) {
+            if(G.points[this.flavor] >= this.nextUpgrade()) {
                 this.hidden = false;
             } else {
                 return;
@@ -82,7 +83,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
             ctx.fillStyle = C.button_shadow;
         }
         ctx.fillRect(this.x+2, this.y+2, this.width, this.height);
-        if(G.points >= this.nextUpgrade()) {
+        if(G.points[this.flavor] >= this.nextUpgrade()) {
             ctx.fillStyle = C.upgrade_button_active;
         } else {
             ctx.fillStyle = C.upgrade_button_inactive;
@@ -117,8 +118,8 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
         }
         for(var i=0; i<factor; i++) {
             var cost = this.upgradeCost(this.getLevel() + 1);
-            if(G.points >= cost) {
-                addPoints(-cost);
+            if(G.points[this.flavor] >= cost) {
+                addPoints(-cost, this.flavor);
                 this.increaseLevel(1);
                 this.upgrade();
             }
@@ -156,7 +157,7 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
 
     this.highestPossibleUpgrade = function() {
         var factor = 0;
-        var points = G.points;
+        var points = G.points[this.flavor];
         for(var i=1; true; i++) {
             points -= this.upgradeCost(this.getLevel() + i); 
             if(points >= 0) {
@@ -170,8 +171,8 @@ var UpgradeButton = function(text, x, y, width, height, displayValue, upgrade, u
 
     this.adjustUpgradeProgress = function() {
         var cost = this.nextUpgrade();
-        var progress = G.points / cost;
-        if(G.points >= cost) {
+        var progress = G.points[this.flavor] / cost;
+        if(G.points[this.flavor] >= cost) {
             progress = 1.0;
         }
         this.upgradeProgress += (progress - this.upgradeProgress) / 2;
