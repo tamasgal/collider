@@ -115,22 +115,25 @@ var KEY = {
 
 var egg = [];
 
-window.onload = function() {
-    canvas = document.getElementById("canvas");
-    ctx = canvas.getContext("2d");
+if (typeof window !== 'undefined') {
 
-    canvas.addEventListener("mousedown", startDrag);
-    canvas.addEventListener("mousemove", mouseMoved);
-    canvas.addEventListener("mouseup", stopDrag);
-    document.addEventListener("keydown", keyDown);
-    document.addEventListener("keyup", keyUp);
-    canvas.addEventListener("click", mouseClicked);
+    window.onload = function() {
+        canvas = document.getElementById("canvas");
+        ctx = canvas.getContext("2d");
 
-    initialise();
+        canvas.addEventListener("mousedown", startDrag);
+        canvas.addEventListener("mousemove", mouseMoved);
+        canvas.addEventListener("mouseup", stopDrag);
+        document.addEventListener("keydown", keyDown);
+        document.addEventListener("keyup", keyUp);
+        canvas.addEventListener("click", mouseClicked);
 
-    var fps = 60.;
-    setInterval(update, 1000/fps);
-    // setInterval(saveState, 1000);
+        initialise();
+
+        var fps = 60.;
+        setInterval(update, 1000/fps);
+        // setInterval(saveState, 1000);
+    }
 }
 
 function zeros(n) {
@@ -215,127 +218,69 @@ function reset() {
     eraseCookie("G");
 }
 
+U = {
+    'MULTIPLIER': {
+        'displayValue' : function() { return G.multiplier.toPrecision(3); },
+        'upgrade' : function() { G.multiplier *= US.multiplier; },
+        'upgradeCost' : function(level) { return Math.pow(CS.multiplier, level); }
+    },
+    'BALLS': {
+        'displayValue' : function() {return G.nBalls;},
+        'upgrade' : function() {G.nBalls += US.nBalls;},
+        'upgradeCost' : function(level) {return Math.pow(CS.nBalls, level);}
+    },
+    'TARGET SIZE': {
+        'displayValue' : function() {return G.targetSize;},
+        'upgrade' : function() {G.targetSize += US.targetSize;},
+        'upgradeCost' : function(level) {return Math.pow(CS.targetSize, level);}
+    },
+    'LIFETIME': {
+        'displayValue' : function() {return G.lifetime;},
+        'upgrade' : function() {G.lifetime += US.lifetime;},
+        'upgradeCost' : function(level) {return Math.pow(CS.lifetime, level);}
+    },
+    'MAGNET': {
+        'displayValue' : function() {return G.magnet.factor;},
+        'upgrade' : function() {G.magnet.factor += US.magnet;},
+        'upgradeCost' : function(level) {return Math.pow(CS.magnet, level);}
+    },
+    'TIMEWARP': {
+        'displayValue' : function() {return G.timewarp;},
+        'upgrade' : function() {G.timewarp += US.timewarp;},
+        'upgradeCost' : function(level) {return Math.pow(CS.timewarp, level);}
+    },
+    'TIMEWARP FACTOR': {
+        'displayValue' : function() {return G.timewarpFactor;},
+        'upgrade' : function() {G.timewarpFactor += US.timewarpFactor;},
+        'upgradeCost' : function(level) {return Math.pow(CS.timewarpFactor, level);}
+    },
+    'REPULSION': {
+        'displayValue' : function() {return G.repulsionProb.toPrecision(2);},
+        'upgrade' : function() {G.repulsionProb += US.repulsion;},
+        'upgradeCost' : function(level) {return Math.pow(CS.repulsion, level);}
+    },
+    'VISCOSITY': {
+        'displayValue' : function() {return G.viscosity.toPrecision(2);},
+        'upgrade' : function() {G.viscosity += US.viscosity;},
+        'upgradeCost' : function(level) {return Math.pow(CS.viscosity, level);}
+    }
+}
+
 function initGUI() {
     GUI.buttons.push(new Button("START ROUND", 50, 50, 180, 20, clickNewRound));
     GUI.buttons.push(new Button("RESTORE", G.world.width-50-100, 275, 100, 20, restoreState));
     GUI.buttons.push(new Button("SAVE", G.world.width-50-100, 300, 100, 20, saveState));
-    GUI.buttons.push(
-        new UpgradeButton("MULTIPLIER", 50, 100, 180, 20,
-            displayValue = function() {
-                return G.multiplier.toPrecision(3);
-            },
-            upgrade = function() {
-                G.multiplier *= US.multiplier;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.multiplier, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("BALLS", 50, 125, 180, 20,
-            displayValue = function() {
-                return G.nBalls;
-            },
-            upgrade = function() {
-                G.nBalls += US.nBalls;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.nBalls, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("TARGET SIZE", 50, 150, 180, 20,
-            displayValue = function() {
-                return G.targetSize;
-            },
-            upgrade = function() {
-                G.targetSize += US.targetSize;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.targetSize, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("LIFETIME", 50, 175, 180, 20,
-            displayValue = function() {
-                return G.lifetime;
-            },
-            upgrade = function() {
-                G.lifetime += US.lifetime;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.lifetime, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("MAGNET", 50, 200, 180, 20,
-            displayValue = function() {
-                return G.magnet.factor;
-            },
-            upgrade = function() {
-                G.magnet.factor += US.magnet;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.magnet, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("TIMEWARP", 50, 225, 180, 20,
-            displayValue = function() {
-                return G.timewarp;
-            },
-            upgrade = function() {
-                G.timewarp += US.timewarp;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.timewarp, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("TIMEWARP FACTOR", 50, 250, 180, 20,
-            displayValue = function() {
-                return G.timewarpFactor;
-            },
-            upgrade = function() {
-                G.timewarpFactor += US.timewarpFactor;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.timewarpFactor, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("REPULSION", 50, 275, 180, 20,
-            displayValue = function() {
-                return G.repulsionProb.toPrecision(2);
-            },
-            upgrade = function() {
-                G.repulsionProb += US.repulsion;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.repulsion, level);
-            },
-        )
-    );
-    GUI.buttons.push(
-        new UpgradeButton("VISCOSITY", 50, 300, 180, 20,
-            displayValue = function() {
-                return G.viscosity.toPrecision(2);
-            },
-            upgrade = function() {
-                G.viscosity += US.viscosity;
-            },
-            upgradeCost = function(level) {
-                return Math.pow(CS.viscosity, level);
-            },
-        )
-    );
+
+    let offset = 0;
+    for(let key in U) {
+        var upgrade = U[key];
+        GUI.buttons.push(
+            new UpgradeButton(key, 50, 100+offset, 180, 20,
+                              upgrade.displayValue, upgrade.upgrade, upgrade.upgradeCost));
+        console.log(key);
+        offset += 25;
+    }
+
 }
 
 function startNewRound() {
@@ -474,26 +419,30 @@ function update() {
     }
     if(G.inGame) {
         updateGame();
+        updateGUI();
+        if(checkIfRoundHasEnded()) {
+            G.inGame = false;
+            G.inMenu = true;
+            G.targetSet = false;
+        }
     }
     updateStats();
 }
 
 function updateGame() {
     tick();
-    drawCanvas();
     timewarp();
+    processCollisions();
+    updateMagnet();
+    cleanUp();
+}
+
+function updateGUI() {
+    drawCanvas();
     drawBalls();
     drawTargets();
     drawOverlay();
     drawScores();
-    processCollisions();
-    updateMagnet();
-    cleanUp();
-    if(checkIfRoundHasEnded()) {
-        G.inGame = false;
-        G.inMenu = true;
-        G.targetSet = false;
-    }
 }
 
 function drawOverlay() {
@@ -754,14 +703,19 @@ function clickNewRound() {
 function clickInGame(evt) {
     console.log("Clicked in-game");
     if( S.targets.length == 0 && !G.targetSet) {
-        G.targetSet = true;
         x = evt.clientX - canvas.offsetLeft;
         y = evt.clientY - canvas.offsetTop;
-        target = new Target(x, y);
-        S.targets.push(target);
-        G.magnet.x = x;
-        G.magnet.y = y;
+        setTargetAt(x, y);
     }
+}
+
+function setTargetAt(x, y) {
+    console.log(x, y);
+    G.targetSet = true;
+    target = new Target(x, y);
+    S.targets.push(target);
+    G.magnet.x = x;
+    G.magnet.y = y;
 }
 
 function check3DEllipsoid()
