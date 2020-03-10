@@ -711,7 +711,6 @@ function clickInGame(evt) {
 }
 
 function setTargetAt(x, y) {
-    console.log(x, y);
     G.targetSet = true;
     target = new Target(x, y);
     S.targets.push(target);
