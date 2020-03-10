@@ -5,7 +5,7 @@ startNewRound();
 clickEvt = {'x': 40, 'y': 100};
 setTargetAt(clickEvt.x, clickEvt.y);
 
-while(!checkIfRoundHasEnded()) {
+while(!roundHasEnded()) {
     updateGame();
 }
 

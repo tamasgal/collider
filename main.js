@@ -283,6 +283,7 @@ function initGUI() {
 
 }
 
+
 function startNewRound() {
     G.nRounds += 1;
     S.balls = [];
@@ -420,7 +421,7 @@ function update() {
     if(G.inGame) {
         updateGame();
         updateGUI();
-        if(checkIfRoundHasEnded()) {
+        if(roundHasEnded()) {
             G.inGame = false;
             G.inMenu = true;
             G.targetSet = false;
@@ -486,7 +487,7 @@ function updateStats() {
     drawStats();
 }
 
-function checkIfRoundHasEnded() {
+function roundHasEnded() {
     if(G.targetSet && (S.targets.length == 0 || S.balls.length == 0)) {
         return true;
     }
