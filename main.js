@@ -221,7 +221,7 @@ function reset() {
 U = {
     'MULTIPLIER': {
         'displayValue' : function() { return G.multiplier.toPrecision(3); },
-        'upgrade' : function() { G.multiplier *= US.multiplier; },
+        'upgrade' : function() { G.multiplier += US.multiplier; },
         'upgradeCost' : function(level) { return Math.pow(CS.multiplier, level); }
     },
     'BALLS': {
