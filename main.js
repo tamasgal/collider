@@ -302,7 +302,7 @@ function createBalls()  {
         r = 5;
         x = (G.world.width - 2 * r) * Math.random() + r;
         y = (G.world.height - 2 * r) * Math.random() + r;
-        d = Math.random() * Math.PI;
+        d = Math.random() * 2 * Math.PI;
         v = Math.random() * 3 + 1;
         dx = Math.cos(d) * v;
         dy = Math.sin(d) * v;
