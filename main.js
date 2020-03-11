@@ -82,7 +82,7 @@ var CS = {
 
 //upgrade scaling
 var US = {
-    "multiplier": 1.1,
+    "multiplier": 0.1,
     "nBalls": 1,
     "targetSize": 1,
     "lifetime": 10,
